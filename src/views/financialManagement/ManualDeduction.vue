@@ -8,11 +8,20 @@
       label-width="100px"
       class="demo-ruleForm"
     >
-      <el-form-item label="生产数量" prop="account">
-        <el-input v-model.number="ruleForm.account" />
+      <el-form-item label="会员手机号" prop="telphone">
+        <el-input v-model.number="ruleForm.telphone" />
       </el-form-item>
-      <el-form-item label="充值金额" prop="money">
+      <el-form-item label="扣减金额" prop="money">
         <el-input v-model.number="ruleForm.money" />
+      </el-form-item>
+      <el-form-item label="资金类型" prop="type">
+        <el-select v-model="ruleForm.type" placeholder="请选择">
+          <el-option label="科豆" :value="1" />
+          <el-option label="豆芽分" :value="2" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="扣减理由" prop="reason">
+        <el-input v-model.number="ruleForm.reason" type="textarea" :rows="2" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
@@ -27,25 +36,41 @@ export default {
   data() {
     return {
       ruleForm: {
-        account: '',
-        money: ''
+        telphone: '',
+        money: '',
+        type: '',
+        reason: ''
       },
       rules: {
-        account: [
+        telphone: [
           {
             required: true,
-            message: '请输入生产数量',
+            message: '请输入会员手机号',
             trigger: 'blur'
           },
-          { type: 'number', message: '生产数量必须为数字值' }
+          { type: 'number', message: '会员手机号必须为数字值' }
         ],
         money: [
           {
             required: true,
-            message: '请输入充值金额',
+            message: '请输入扣减金额',
             trigger: 'blur'
           },
-          { type: 'number', message: '充值金额必须为数字值' }
+          { type: 'number', message: '扣减金额必须为数字值' }
+        ],
+        type: [
+          {
+            required: true,
+            message: '请选择资金类型',
+            trigger: 'blur'
+          }
+        ],
+        reason: [
+          {
+            required: true,
+            message: '请输入扣减理由',
+            trigger: 'blur'
+          }
         ]
       }
     }

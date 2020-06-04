@@ -1,0 +1,23 @@
+// base color
+$blue:#1890FF;
+$red:red;
+$gray: #AABCC9;
+
+.container {
+    padding: 20px;
+    background: #ffffff;
+    min-height: 800px;
+}
+
+.pointer-span{
+    cursor: pointer;
+}
+.blue-text{
+    color: $blue;
+}
+.red-text{
+    color: $red;
+}
+.gray-text{
+    color: $gray;
+}

@@ -6,7 +6,6 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 
-
 export const constantRoutes = [
   {
     path: '/redirect',
@@ -39,6 +38,7 @@ export const constantRoutes = [
     component: () => import('@/views/error-page/401'),
     hidden: true
   },
+  // ------------------------------今日概览----------------------------------
   {
     path: '/',
     component: Layout,
@@ -58,7 +58,7 @@ export const constantRoutes = [
     name: 'systemManagement',
     redirect: '/systemManagement/giftList',
     component: Layout,
-    meta: { title: '系统管理', icon: '' },
+    meta: { title: '系统管理', icon: 'guanli' },
     children: [
       {
         path: '/systemManagement/giftList',
@@ -92,7 +92,7 @@ export const constantRoutes = [
     name: 'agentManagement',
     redirect: '/agentManagement/allAgent',
     component: Layout,
-    meta: { title: '代理商管理', icon: '' },
+    meta: { title: '代理商管理', icon: 'dailishang' },
     children: [
       {
         path: '/agentManagement/allAgent',
@@ -122,55 +122,183 @@ export const constantRoutes = [
         name: 'goldFlow',
         meta: { title: '出入金流水' },
         component: () => import('@/views/agentManagement/GoldFlow')
+      },
+      {
+        path: '/agentManagement/membershipFlowing',
+        name: 'membershipFlowing',
+        meta: { title: '会员入金流水' },
+        component: () => import('@/views/agentManagement/MembershipFlowing')
+      },
+      {
+        path: '/agentManagement/guessFlowing',
+        name: 'guessFlowing',
+        meta: { title: '竞猜流水' },
+        component: () => import('@/views/agentManagement/GuessFlowing')
+      },
+      {
+        path: '/agentManagement/beansFlowing',
+        name: 'beansFlowing',
+        meta: { title: '科豆流水' },
+        component: () => import('@/views/agentManagement/BeansFlowing')
       }
     ]
   },
+  // ------------------------------财务管理----------------------------------
   {
     path: '/financialManagement',
     name: 'financialManagement',
     redirect: '/financialManagement/membershipFlowing',
     component: Layout,
-    meta: { title: '财务管理', icon: 'bxSetting' },
+    meta: { title: '财务管理', icon: 'caiwu' },
     children: [
       {
         path: '/financialManagement/membershipFlowing',
         name: 'membershipFlowing',
         meta: { title: '会员入金流水' },
-        component: () => import('@/views/financialManagement/membershipFlowing/MembershipFlowing')
+        component: () => import('@/views/financialManagement/MemberShipFlowing')
       },
       {
         path: '/financialManagement/guessFlowing',
         name: 'guessFlowing',
         meta: { title: '竞猜流水' },
-        component: () => import('@/views/financialManagement/guessFlowing/GuessFlowing')
+        component: () => import('@/views/financialManagement/GuessFlowing')
       },
       {
         path: '/financialManagement/beansFlowing',
         name: 'beansFlowing',
         meta: { title: '科豆流水' },
-        component: () => import('@/views/financialManagement/beansFlowing/BeansFlowing')
+        component: () => import('@/views/financialManagement/BeansFlowing')
+      },
+      {
+        path: '/financialManagement/goldRepurchaseOrder',
+        name: 'goldRepurchaseOrder',
+        meta: { title: '黄金回购订单' },
+        component: () => import('@/views/financialManagement/GoldRepurchaseOrder')
+      },
+      {
+        path: '/financialManagement/offlinePayment',
+        name: 'offlinePayment',
+        meta: { title: '线下充值' },
+        component: () => import('@/views/financialManagement/OfflinePayment')
+      },
+      {
+        path: '/financialManagement/manualDeduction',
+        name: 'manualDeduction',
+        meta: { title: '手动扣减' },
+        component: () => import('@/views/financialManagement/ManualDeduction')
+      },
+      {
+        path: '/financialManagement/agentRechargeRecord',
+        name: 'agentRechargeRecord',
+        meta: { title: '代理商充值记录' },
+        component: () => import('@/views/financialManagement/AgentRechargeRecord')
+      },
+      {
+        path: '/financialManagement/simulateAccountRecharge',
+        name: 'simulateAccountRecharge',
+        meta: { title: '模拟账号充值' },
+        component: () => import('@/views/financialManagement/SimulateAccountRecharge')
       }
     ]
   },
+  // ------------------------------会员管理----------------------------------
   {
     path: '/memberManagement',
     name: 'memberManagement',
     redirect: '/memberManagement/memberList',
     component: Layout,
-    meta: { title: '会员管理', icon: '' },
+    meta: { title: '会员管理', icon: 'huiyuan' },
     children: [
       {
         path: '/memberManagement/memberList',
         name: 'memberList',
         meta: { title: '会员列表' },
         component: () => import('@/views/memberManagement/MemberList')
-      },
-
+      }
     ]
   },
+  // ------------------------------积分商城管理----------------------------------
+  {
+    path: '/integralMALL',
+    name: 'integralMALL',
+    redirect: '/integralMALL/orderList',
+    component: Layout,
+    meta: { title: '积分商城管理', icon: 'shangcheng' },
+    children: [
+      {
+        path: '/integralMALL/orderList',
+        name: 'orderList',
+        meta: { title: '订单列表' },
+        component: () => import('@/views/integralMALL/OrderList')
+      },
+      {
+        path: '/integralMALL/productList',
+        name: 'productList',
+        meta: { title: '商品列表' },
+        component: () => import('@/views/integralMALL/ProductList')
+      }
+    ]
+  },
+  // ------------------------------banner管理----------------------------------
+  {
+    path: '/bannerManagement',
+    name: 'bannerManagement',
+    redirect: '/bannerManagement/bannerList',
+    component: Layout,
+    meta: { title: 'banner管理', icon: 'tupian' },
+    children: [
+      {
+        path: '/bannerManagement/bannerList',
+        name: 'bannerList',
+        meta: { title: 'banner列表' },
+        component: () => import('@/views/bannerManagement/BannerList')
+      }
+    ]
+  },
+  // ------------------------------视频管理----------------------------------
+  {
+    path: '/videoManagement',
+    name: 'videoManagement',
+    // redirect: '/videoManagement/videoList',
+    component: Layout,
+    meta: { title: '视频管理', icon: 'shipinbofangyingpian' },
+    children: [
+      {
+        path: '/videoManagement/videoList',
+        name: 'videoList',
+        meta: { title: '视频列表' },
+        component: () => import('@/views/videoManagement/VideoList')
+      }
+    ]
+  },
+  // ------------------------------内容管理----------------------------------
+  {
+    path: '/contentManagement',
+    name: 'contentManagement',
+    redirect: '/contentManagement/articleInformation',
+    component: Layout,
+    meta: { title: '内容', icon: 'guanli-2' },
+    children: [
+      {
+        path: '/contentManagement/articleInformation',
+        name: 'articleInformation',
+        meta: { title: '文章资讯' },
+        component: () => import('@/views/contentManagement/ArticleInformation')
+      },
+      {
+        path: '/contentManagement/proclamationList',
+        name: 'proclamationList',
+        meta: { title: '帮助/公告列表' },
+        component: () => import('@/views/contentManagement/ProclamationList')
+      }, {
+        path: '/contentManagement/videoInformation',
+        name: 'videoInformation',
+        meta: { title: '视频资讯' },
+        component: () => import('@/views/contentManagement/VideoInformation')
+      }
+    ]
+  }
 ]
-
-
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
