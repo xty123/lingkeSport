@@ -1,28 +1,22 @@
 <template>
   <div class="container">
-    <el-row type="flex" justify="end" style="margin-bottom: 20px">
-      <el-button type="primary" icon="el-icon-plus" @click="addBanner">新增</el-button>
+    <el-row type="flex" justify="space-between" style="margin-bottom: 20px">
+      <el-col :span="20" />
+      <el-col :span="4" style="text-align:right">
+        <el-button type="primary" icon="el-icon-plus" @click="addArtical">新增</el-button>
+      </el-col>
     </el-row>
     <el-table v-loading="listLoading" :data="tableData" border style="width: 100%">
       <el-table-column align="center" type="index" width="80px" />
-      <el-table-column prop="title" label="标题" align="center" />
-      <el-table-column label="图片" align="center">
-        <template slot-scope="{row}">
-          <el-avatar shape="square" :size="100" fit="cover" :src="row.url" />
-        </template>
-      </el-table-column>
-      <el-table-column prop="path" label="跳转路径" align="center" />
-      <el-table-column prop="belong" label="所属" align="center" />
-      <el-table-column prop="time" label="创建时间" align="center" />
+      <el-table-column prop="title" label="主播名称" align="center" />
+      <el-table-column prop="url" label="主播图片" align="center" />
+      <el-table-column prop="path" label="主播地址" align="center" />
+      <el-table-column prop="path" label="描述" align="center" />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row, $index}">
           <span class="pointer-span">
             <i class="el-icon-edit" />
-            <span class="blue-text" @click="modifyBanner(row, $index)">修改</span>
-          </span>
-          <span class="pointer-span" style="margin-left: 20px">
-            <i class="el-icon-circle-close" />
-            <span class="gray-text" @click="deleteBanner(row, $index)">删除</span>
+            <span class="blue-text" @click="modifyVideo(row, $index)">修改</span>
           </span>
         </template>
       </el-table-column>
@@ -39,19 +33,12 @@
       />
     </el-row>
 
-    <el-dialog :title="dialogTitle" :visible.sync="isShowAdd" width="750px">
-      <el-form ref="bannerForm" :inline="true" :model="bannerForm" :rules="rules">
-        <el-form-item label="banner标题：" prop="title">
-          <el-input v-model="bannerForm.title" autocomplete="off" />
+    <el-dialog :title="dialogTitle" :visible.sync="isShowAdd" width="500px">
+      <el-form ref="articalForm" :model="articalForm" :rules="rules">
+        <el-form-item label="主播名称：" :label-width="formLabelWidth">
+          <el-input v-model="articalForm.title" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="banner所属：" prop="belong">
-          <el-select v-model="bannerForm.belong" placeholder="请选择">
-            <el-option label="首页banner" value="0" />
-            <el-option label="资讯banner" value="1" />
-            <el-option label="专家banner" value="2" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="banner图片：" prop="url">
+        <el-form-item label="主播头像：" :label-width="formLabelWidth">
           <el-upload
             action="https://jsonplaceholder.typicode.com/posts/"
             list-type="picture-card"
@@ -65,12 +52,15 @@
             <img width="100%" :src="dialogImageUrl" alt>
           </el-dialog>
         </el-form-item>
-        <el-form-item label="banner内容：" prop="desc">
-          <tinymce v-model="bannerForm.desc" :height="300" />
+        <el-form-item label="地址：" :label-width="formLabelWidth">
+          <el-input v-model="articalForm.address" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="描述：" :label-width="formLabelWidth">
+          <el-input v-model="articalForm.desc" type="textarea" :rows="2" autocomplete="off" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="saveBanner('bannerForm')">保存</el-button>
+        <el-button type="primary" @click="saveVideo('articalForm')">保存</el-button>
         <el-button @click="isShowAdd = false">取 消</el-button>
       </div>
     </el-dialog>
@@ -78,100 +68,67 @@
 </template>
 
 <script>
-import Tinymce from '@/components/Tinymce'
 export default {
-  components: { Tinymce },
   data() {
     return {
-      dialogTitle: '新增banner',
+      formLabelWidth: '100px',
+      dialogTitle: '新增主播',
       listLoading: false,
       tableData: [
         {
-          title: '凌科银行资金监管说明',
+          id: 'b9c81ac3-214c-4fec-b7e5-46d41ed44513',
+          title: 'T1赛后采访：离拿下春季赛冠军只剩最后一步！',
           url:
             'http://cdn.lingke.com.cn/431783a0-a1fc-44e0-ba62-9f4bea46e6fd.png',
           path: 'http://h5.lingke.com.cn/yqRewardsWeb/h5/banner?id=19',
-          belong: '专家banner',
+          type: '0',
           time: '202005184232'
         },
         {
-          title: '凌科银行资金监管说明',
+          id: 'b9c81ac3-214c-4fec-b7e5-46d41ed44513',
+          title: 'T1赛后采访：离拿下春季赛冠军只剩最后一步！',
           url:
             'http://cdn.lingke.com.cn/431783a0-a1fc-44e0-ba62-9f4bea46e6fd.png',
           path: 'http://h5.lingke.com.cn/yqRewardsWeb/h5/banner?id=19',
-          belong: '专家banner',
+          type: '0',
           time: '202005184232'
         },
         {
-          title: '凌科银行资金监管说明',
+          id: 'b9c81ac3-214c-4fec-b7e5-46d41ed44513',
+          title: 'T1赛后采访：离拿下春季赛冠军只剩最后一步！',
           url:
             'http://cdn.lingke.com.cn/431783a0-a1fc-44e0-ba62-9f4bea46e6fd.png',
           path: 'http://h5.lingke.com.cn/yqRewardsWeb/h5/banner?id=19',
-          belong: '专家banner',
+          type: '1',
           time: '202005184232'
         },
         {
-          title: '凌科银行资金监管说明',
+          id: 'b9c81ac3-214c-4fec-b7e5-46d41ed44513',
+          title: 'T1赛后采访：离拿下春季赛冠军只剩最后一步！',
           url:
             'http://cdn.lingke.com.cn/431783a0-a1fc-44e0-ba62-9f4bea46e6fd.png',
           path: 'http://h5.lingke.com.cn/yqRewardsWeb/h5/banner?id=19',
-          belong: '专家banner',
+          type: '1',
           time: '202005184232'
         },
         {
-          title: '凌科银行资金监管说明',
+          id: 'b9c81ac3-214c-4fec-b7e5-46d41ed44513',
+          title: 'T1赛后采访：离拿下春季赛冠军只剩最后一步！',
           url:
             'http://cdn.lingke.com.cn/431783a0-a1fc-44e0-ba62-9f4bea46e6fd.png',
           path: 'http://h5.lingke.com.cn/yqRewardsWeb/h5/banner?id=19',
-          belong: '专家banner',
-          time: '202005184232'
-        },
-        {
-          title: '凌科银行资金监管说明',
-          url:
-            'http://cdn.lingke.com.cn/431783a0-a1fc-44e0-ba62-9f4bea46e6fd.png',
-          path: 'http://h5.lingke.com.cn/yqRewardsWeb/h5/banner?id=19',
-          belong: '专家banner',
+          type: '0',
           time: '202005184232'
         }
       ],
       isShowAdd: false,
-      bannerForm: {
+      articalForm: {
         title: '',
         url: '',
-        belong: '',
+        address: '',
         desc: ''
       },
-      rules: {
-        title: [
-          {
-            required: true,
-            message: '请输入banner标题',
-            trigger: 'blur'
-          }
-        ],
-        url: [
-          {
-            required: true,
-            message: '请选择banner图片',
-            trigger: 'blur'
-          }
-        ],
-        belong: [
-          {
-            required: true,
-            message: '请选择banner所属',
-            trigger: 'blur'
-          }
-        ],
-        desc: [
-          {
-            required: true,
-            message: '请输入banner内容',
-            trigger: 'blur'
-          }
-        ]
-      },
+      rules: {},
       dialogImageUrl: '',
       dialogVisible: false
     }
@@ -187,18 +144,18 @@ export default {
     },
     handlePic(resp, file, fileList) {
       console.log(resp, file, fileList)
-      // this.bannerForm.url = URL.createObjectURL(file.raw);
+      // this.articalForm.url = URL.createObjectURL(file.raw);
     },
-    modifyBanner(row, index) {
+    modifyVideo(row, index) {
       this.isShowAdd = true
-      this.bannerForm = JSON.parse(JSON.stringify(row))
-      this.dialogTitle = '修改banner'
+      this.articalForm = JSON.parse(JSON.stringify(row))
+      this.dialogTitle = '修改主播'
     },
-    addBanner() {
-      this.dialogTitle = '新增banner'
+    addArtical() {
+      this.dialogTitle = '新增主播'
       this.isShowAdd = true
     },
-    saveBanner(formName) {
+    saveVideo(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.isShowAdd = false
@@ -208,7 +165,7 @@ export default {
         }
       })
     },
-    deleteBanner(row, index) {
+    deleteVideo(row, index) {
       this.$confirm('确定想要删除?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

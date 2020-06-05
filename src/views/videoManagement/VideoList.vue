@@ -1,23 +1,22 @@
 <template>
   <div class="container">
     <el-row type="flex" justify="end" style="margin-bottom: 20px">
-      <el-button type="primary" icon="el-icon-plus" @click="addGift">新增</el-button>
+      <el-button type="primary" icon="el-icon-plus" @click="addVideo">新增</el-button>
     </el-row>
     <el-table v-loading="listLoading" :data="tableData" border style="width: 100%">
       <el-table-column align="center" type="index" width="80px" />
-      <el-table-column prop="name" label="名称" align="center" />
-      <el-table-column prop="type" label="类型" align="center" />
-      <el-table-column prop="account" label="科豆" align="center" />
-      <el-table-column prop="status" label="状态" align="center" />
+      <el-table-column prop="title" label="标题" align="center" />
+      <el-table-column prop="url" label="图片url" align="center" />
+      <el-table-column prop="path" label="视频url" align="center" />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row, $index}">
           <span class="pointer-span">
             <i class="el-icon-edit" />
-            <span class="blue-text" @click="modifyGift(row, $index)">修改</span>
+            <span class="blue-text" @click="modifyVideo(row, $index)">修改</span>
           </span>
           <span class="pointer-span" style="margin-left: 20px">
             <i class="el-icon-circle-close" />
-            <span class="gray-text">禁用</span>
+            <span class="gray-text" @click="deleteVideo(row, $index)">删除</span>
           </span>
         </template>
       </el-table-column>
@@ -35,20 +34,18 @@
     </el-row>
 
     <el-dialog :title="dialogTitle" :visible.sync="isShowAdd" width="500px">
-      <el-form ref="giftForm" :model="giftForm" :rules="rules">
-        <el-form-item label="名称" prop="name" :label-width="formLabelWidth">
-          <el-input v-model="giftForm.name" autocomplete="off" style="width: 200px" />
+      <el-form ref="videoForm" :model="videoForm" :rules="rules">
+        <el-form-item label="视频标题：" prop="title" label-width="95px">
+          <el-input v-model="videoForm.title" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="图片" :label-width="formLabelWidth">
-          <!-- <el-upload
-            class="upload-demo"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :limit="1"
-            :on-change="handlePic"
-            :show-file-list="false"
-          >
-            <el-button size="small" type="primary">点击上传</el-button>
-          </el-upload>-->
+        <el-form-item label="视频所属：" prop="belong">
+          <el-select v-model="videoForm.belong" placeholder="请选择">
+            <el-option label="英雄联盟" value="0" />
+            <el-option label="刀塔2" value="1" />
+            <el-option label="王者荣耀" value="2" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="视频图片：" prop="url">
           <el-upload
             action="https://jsonplaceholder.typicode.com/posts/"
             list-type="picture-card"
@@ -62,18 +59,12 @@
             <img width="100%" :src="dialogImageUrl" alt>
           </el-dialog>
         </el-form-item>
-        <el-form-item label="类型" :label-width="formLabelWidth">
-          <el-select v-model="giftForm.type" placeholder="请选择">
-            <el-option label="普通" value="普通" />
-            <el-option label="动画" value="动画" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="科豆" :label-width="formLabelWidth">
-          <el-input v-model="giftForm.beans" autocomplete="off" style="width: 200px" />
+        <el-form-item label="视频上传：" prop="desc">
+          <el-button type="primary">选择文件</el-button>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="saveGift('giftForm')">保存</el-button>
+        <el-button type="primary" @click="saveVideo('videoForm')">保存</el-button>
         <el-button @click="isShowAdd = false">取 消</el-button>
       </div>
     </el-dialog>
@@ -84,59 +75,95 @@
 export default {
   data() {
     return {
-      dialogTitle: '新增礼品',
+      dialogTitle: '新增视频',
       listLoading: false,
       tableData: [
         {
-          type: '普通',
-          name: '点赞',
-          account: '支付宝',
-          openingBank: '',
-          status: '正常'
+          title: 'T1赛后采访：离拿下春季赛冠军只剩最后一步！',
+          url:
+            'http://cdn.lingke.com.cn/431783a0-a1fc-44e0-ba62-9f4bea46e6fd.png',
+          path: 'http://h5.lingke.com.cn/yqRewardsWeb/h5/banner?id=19',
+          belong: '专家banner',
+          time: '202005184232'
         },
         {
-          type: '普通',
-          name: '气球',
-          account: '支付宝',
-          openingBank: '',
-          status: '正常'
+          title: 'T1赛后采访：离拿下春季赛冠军只剩最后一步！',
+          url:
+            'http://cdn.lingke.com.cn/431783a0-a1fc-44e0-ba62-9f4bea46e6fd.png',
+          path: 'http://h5.lingke.com.cn/yqRewardsWeb/h5/banner?id=19',
+          belong: '专家banner',
+          time: '202005184232'
         },
         {
-          type: '动画',
-          name: '王小虎',
-          account: '支付宝',
-          openingBank: '',
-          status: '正常'
+          title: 'T1赛后采访：离拿下春季赛冠军只剩最后一步！',
+          url:
+            'http://cdn.lingke.com.cn/431783a0-a1fc-44e0-ba62-9f4bea46e6fd.png',
+          path: 'http://h5.lingke.com.cn/yqRewardsWeb/h5/banner?id=19',
+          belong: '专家banner',
+          time: '202005184232'
         },
         {
-          type: '普通',
-          name: '王小虎',
-          account: '支付宝',
-          openingBank: '',
-          status: '正常'
+          title: 'T1赛后采访：离拿下春季赛冠军只剩最后一步！',
+          url:
+            'http://cdn.lingke.com.cn/431783a0-a1fc-44e0-ba62-9f4bea46e6fd.png',
+          path: 'http://h5.lingke.com.cn/yqRewardsWeb/h5/banner?id=19',
+          belong: '专家banner',
+          time: '202005184232'
+        },
+        {
+          title: 'T1赛后采访：离拿下春季赛冠军只剩最后一步！',
+          url:
+            'http://cdn.lingke.com.cn/431783a0-a1fc-44e0-ba62-9f4bea46e6fd.png',
+          path: 'http://h5.lingke.com.cn/yqRewardsWeb/h5/banner?id=19',
+          belong: '专家banner',
+          time: '202005184232'
+        },
+        {
+          title: 'T1赛后采访：离拿下春季赛冠军只剩最后一步！',
+          url:
+            'http://cdn.lingke.com.cn/431783a0-a1fc-44e0-ba62-9f4bea46e6fd.png',
+          path: 'http://h5.lingke.com.cn/yqRewardsWeb/h5/banner?id=19',
+          belong: '专家banner',
+          time: '202005184232'
         }
       ],
       isShowAdd: false,
-      giftForm: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
+      videoForm: {
+        title: '',
+        url: '',
+        belong: '',
         desc: ''
       },
       rules: {
-        name: [
+        title: [
           {
             required: true,
-            message: '请输入名称',
+            message: '请输入banner标题',
+            trigger: 'blur'
+          }
+        ],
+        url: [
+          {
+            required: true,
+            message: '请选择banner图片',
+            trigger: 'blur'
+          }
+        ],
+        belong: [
+          {
+            required: true,
+            message: '请选择banner所属',
+            trigger: 'blur'
+          }
+        ],
+        desc: [
+          {
+            required: true,
+            message: '请输入banner内容',
             trigger: 'blur'
           }
         ]
       },
-      formLabelWidth: '120px',
       dialogImageUrl: '',
       dialogVisible: false
     }
@@ -152,17 +179,18 @@ export default {
     },
     handlePic(resp, file, fileList) {
       console.log(resp, file, fileList)
-      // this.giftForm.url = URL.createObjectURL(file.raw);
+      // this.videoForm.url = URL.createObjectURL(file.raw);
     },
-    modifyGift(row, index) {
+    modifyVideo(row, index) {
       this.isShowAdd = true
-      this.dialogTitle = '修改礼品'
+      this.videoForm = JSON.parse(JSON.stringify(row))
+      this.dialogTitle = '修改视频'
     },
-    addGift() {
-      this.dialogTitle = '新增礼品'
+    addVideo() {
+      this.dialogTitle = '新增视频'
       this.isShowAdd = true
     },
-    saveGift(formName) {
+    saveVideo(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.isShowAdd = false
@@ -171,6 +199,25 @@ export default {
           return false
         }
       })
+    },
+    deleteVideo(row, index) {
+      this.$confirm('确定想要删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)

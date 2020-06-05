@@ -2,7 +2,7 @@
   <div class="container">
     <el-row v-if="!isShowDetail" style="display: flex">
       <el-tree
-        style="min-width: 250px;margin-top: 50px"
+        style="min-width: 250px;margin: 58px 20px 0 0;background: #e5e5e5;"
         :data="treeData"
         :props="defaultProps"
         :default-expand-all="true"
@@ -219,6 +219,9 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/styles/common.scss";
+.container {
+  padding: 20px 20px 20px 0;
+}
 .demo-ruleForm {
   width: 40%;
   min-width: 300px;

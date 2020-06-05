@@ -37,17 +37,24 @@
       <el-table-column prop="recipients" label="收件人" align="center" width="200px" />
       <el-table-column prop="amount" label="数量" align="center" />
       <el-table-column prop="paymentBean" label="支付豆苗" align="center" />
-      <el-table-column prop="status" label="状态" align="center" />
+      <el-table-column prop="status" label="状态" align="center">
+        <template slot-scope="{row}">
+          <el-tag
+            size="small"
+            :type="row.status == '待审核' ? 'warning' : row.status == '已收货' ? 'success': '' "
+          >{{ row.status }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" width="180px">
-        <template>
+        <template slot-scope="{row}">
           <span v-if="row.status == '待审核'" class="pointer-span">
-            <span class="blue-text">审核通过</span>
+            <span class="blue-text" @click="approve(row)">审核通过</span>
           </span>
           <span v-if="row.status == '待审核'" class="pointer-span" style="margin-left: 20px">
-            <span class="blue-text">取消订单</span>
+            <span class="blue-text" @click="cancel(row)">取消订单</span>
           </span>
           <span v-if="row.status == '已发货'" class="pointer-span" style="margin-left: 20px">
-            <span class="blue-text">确认收货</span>
+            <span class="blue-text" @click="confirmReceipt(row)">确认收货</span>
           </span>
         </template>
       </el-table-column>
@@ -175,6 +182,62 @@ export default {
     }
   },
   methods: {
+    approve(row) {
+      this.$confirm('您确定要执行此操作吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          this.$message({
+            type: 'success',
+            message: '审核通过成功!'
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消操作'
+          })
+        })
+    },
+    cancel(row) {
+      this.$prompt('取消原因', '取消订单', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      })
+        .then(({ value }) => {
+          this.$message({
+            type: 'success',
+            message: '取消成功'
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '操作取消'
+          })
+        })
+    },
+    confirmReceipt(row) {
+      this.$confirm('您确定要执行此操作吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          this.$message({
+            type: 'success',
+            message: '确认收货成功!'
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消操作'
+          })
+        })
+    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
     },

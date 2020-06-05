@@ -4,7 +4,7 @@
       v-if="sidebar.opened"
       style="width: 210px;height: 50px;display:inline-block;float:left;text-align:center"
     >
-      <img src="@/assets/images/logo.png" alt style="width:80px;height: 40px;margin-top:5px">
+      <img src="@/assets/images/logo.png" alt style="width:128px;height: 40px;margin-top:5px">
     </div>
     <hamburger
       id="hamburger-container"

@@ -1,23 +1,26 @@
 <template>
   <div class="container">
     <el-form :inline="true" class="demo-form-inline">
-      <el-form-item label="状态">
+      <el-form-item label="代理账号/手机号">
+        <el-input placeholder />
+      </el-form-item>
+      <el-form-item label="订单号">
+        <el-input placeholder />
+      </el-form-item>
+      <el-form-item label="收款账号">
         <el-select v-model="queryInfo.status" placeholder="请选择">
-          <el-option label="全部" :value="-1" />
-          <el-option label="正常" :value="1" />
-          <el-option label="禁用" :value="2" />
-          <el-option label="已实名" :value="3" />
-          <el-option label="未实名" :value="3" />
+          <el-option label="请选择" :value="-1" />
+          <el-option label="「支付宝」14321435" :value="1" />
         </el-select>
       </el-form-item>
-      <el-form-item label="用户名">
-        <el-input placeholder />
-      </el-form-item>
-      <el-form-item label="手机号">
-        <el-input placeholder />
-      </el-form-item>
-      <el-form-item label="真实姓名">
-        <el-input placeholder />
+      <el-form-item label="时间">
+        <el-date-picker
+          v-model="queryInfo.time"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary">搜索</el-button>
@@ -25,17 +28,39 @@
     </el-form>
     <el-table v-loading="listLoading" :data="tableData" border style="width: 100%">
       <el-table-column align="center" type="index" width="50px" />
-      <el-table-column prop="agent" label="用户名" align="center" />
-      <el-table-column prop="createTime" label="手机号" align="center" />
-      <el-table-column prop="tier" label="真实姓名" align="center" />
-      <el-table-column prop="balance" label="科豆余额" align="center" />
-      <el-table-column prop="status" label="豆苗分余额" align="center" />
-      <el-table-column prop="availableBalance" label="冻结科豆" align="center" />
-      <el-table-column prop="cashDeposit" label="冻结豆苗" align="center" />
-      <el-table-column prop="commissionThan" label="充值总额" align="center" />
-      <el-table-column prop="promotedNum" label="状态" align="center" />
+      <el-table-column label="申请信息">
+        <template slot-scope="{row}">
+          <div>代理商：{{ row.applicationInfo.agent }}</div>
+          <div>申请时间：{{ row.applicationInfo.time }}</div>
+          <div>订单号：{{ row.applicationInfo.orderNum }}</div>
+        </template>
+      </el-table-column>
+      <el-table-column label="充值信息">
+        <template slot-scope="{row}">
+          <div v-if="row.rechargeInfo.agent === '等待充值'">等待充值</div>
+          <div v-else>「支付宝」「{{ row.rechargeInfo.agent }}」</div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="tier" label="充值金额/实际充值">
+        <template slot-scope="{row}">
+          <div>
+            充值金额：
+            <span class="red-text">{{ row.amountInfo.rechargeNum }}</span>
+          </div>
+          <div>
+            实际上分金额：
+            <span class="yellow-text">{{ row.amountInfo.pointsNum }}</span>
+          </div>
+          <div>处理时间：{{ row.amountInfo.time }}</div>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center">
-        <template />
+        <template slot-scope="{row}">
+          <span v-if="row.rechargeInfo.agent !== '等待充值'">已充值</span>
+          <span v-else class="pointer-span">
+            <span class="blue-text">确认充值</span>
+          </span>
+        </template>
       </el-table-column>
     </el-table>
     <el-row type="flex" justify="end" style="margin-top: 20px">
@@ -60,68 +85,79 @@ export default {
       listLoading: false,
       tableData: [
         {
-          agent: 'd6bba22a4e0746bc806fc47ddd50b942',
-          phone: '2020-06-03 17:10:52',
-          tier: '一级代理',
-          createTime: '2016-05-02',
-          balance: '20.00',
-          status: '正常',
-          availableBalance: '20.00',
-          cashDeposit: '500.00',
-          commissionThan: '0.500',
-          offlineAgent: '8',
-          promotedNum: '456',
-          totalHandle: '44',
-          winningAmount: '43',
-          singleTotal: '23'
+          applicationInfo: {
+            agent: '143232443',
+            time: '2020-05-27 13:24:23',
+            orderNum: '2432153465436'
+          },
+          rechargeInfo: {
+            agent: '214132545'
+          },
+          amountInfo: {
+            rechargeNum: '1000.00',
+            pointsNum: '10024.00',
+            time: '2020-05-27 13:24:23'
+          }
         },
         {
-          agent: 'd6bba22a4e0746bc806fc47ddd50b942',
-          phone: '2020-06-03 17:10:52',
-          tier: '一级代理',
-          createTime: '2016-05-02',
-          balance: '20.00',
-          status: '正常',
-          availableBalance: '20.00',
-          cashDeposit: '500.00',
-          commissionThan: '0.500',
-          offlineAgent: '8',
-          promotedNum: '456',
-          totalHandle: '44',
-          winningAmount: '43',
-          singleTotal: '23'
+          applicationInfo: {
+            agent: '143232443',
+            time: '2020-05-27 13:24:23',
+            orderNum: '2432153465436'
+          },
+          rechargeInfo: {
+            agent: '等待充值'
+          },
+          amountInfo: {
+            rechargeNum: '1000.00',
+            pointsNum: '10024.00',
+            time: '2020-05-27 13:24:23'
+          }
         },
         {
-          agent: 'd6bba22a4e0746bc806fc47ddd50b942',
-          phone: '2020-06-03 17:10:52',
-          tier: '一级代理',
-          createTime: '2016-05-02',
-          balance: '20.00',
-          status: '正常',
-          availableBalance: '20.00',
-          cashDeposit: '500.00',
-          commissionThan: '0.500',
-          offlineAgent: '8',
-          promotedNum: '456',
-          totalHandle: '44',
-          winningAmount: '43',
-          singleTotal: '23'
+          applicationInfo: {
+            agent: '143232443',
+            time: '2020-05-27 13:24:23',
+            orderNum: '2432153465436'
+          },
+          rechargeInfo: {
+            agent: '等待充值'
+          },
+          amountInfo: {
+            rechargeNum: '1000.00',
+            pointsNum: '10024.00',
+            time: '2020-05-27 13:24:23'
+          }
         },
         {
-          agent: 'd6bba22a4e0746bc806fc47ddd50b942',
-          phone: '2020-06-03 17:10:52',
-          tier: '一级代理',
-          createTime: '2016-05-02',
-          balance: '20.00',
-          status: '正常',
-          availableBalance: '20.00',
-          cashDeposit: '500.00',
-          commissionThan: '0.500',
-          offlineAgent: '8',
-          promotedNum: '456',
-          totalHandle: '44',
-          winningAmount: '43',
-          singleTotal: '23'
+          applicationInfo: {
+            agent: '143232443',
+            time: '2020-05-27 13:24:23',
+            orderNum: '2432153465436'
+          },
+          rechargeInfo: {
+            agent: '214132545'
+          },
+          amountInfo: {
+            rechargeNum: '1000.00',
+            pointsNum: '10024.00',
+            time: '2020-05-27 13:24:23'
+          }
+        },
+        {
+          applicationInfo: {
+            agent: '143232443',
+            time: '2020-05-27 13:24:23',
+            orderNum: '2432153465436'
+          },
+          rechargeInfo: {
+            agent: '214132545'
+          },
+          amountInfo: {
+            rechargeNum: '1000.00',
+            pointsNum: '10024.00',
+            time: '2020-05-27 13:24:23'
+          }
         }
       ]
     }

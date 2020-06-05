@@ -66,22 +66,29 @@
       height: 100%;
       width: 100% !important;
     }
-    .el-menu-item.is-active{
-      background-color: $menuHover!important;
+    .el-submenu .el-menu-item{
+      color: #666;
+      padding-left: 55px!important;
     }
     // menu hover
+    .submenu-title-noDropdown{
+      color: $subMenuActiveText;
+    }
     .submenu-title-noDropdown,
     .el-submenu__title {
       &:hover {
         background-color: $menuHover !important;
       }
     }
-
+    .el-submenu__title{
+      background: #fff;
+    }
     .is-active>.el-submenu__title {
       color: $subMenuActiveText !important;
     }
     .is-active {
-      background-color: $subMenuBg !important;
+      background-color: $menuHover!important;
+      color: $menuActiveText!important;
     }
 
     & .nest-menu .el-submenu>.el-submenu__title,

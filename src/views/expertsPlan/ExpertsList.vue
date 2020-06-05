@@ -8,11 +8,11 @@
       label-width="100px"
       class="demo-ruleForm"
     >
-      <el-form-item label="充值手机号" prop="telphone">
-        <el-input v-model.number="ruleForm.telphone" />
+      <el-form-item label="回报率">
+        <el-input v-model.number="ruleForm.account" />
       </el-form-item>
-      <el-form-item label="充值金额" prop="money">
-        <el-input v-model.number="ruleForm.money" />
+      <el-form-item label="专家简介">
+        <el-input v-model="ruleForm.money" type="textarea" :rows="2" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
@@ -27,27 +27,10 @@ export default {
   data() {
     return {
       ruleForm: {
-        telphone: '',
+        account: '',
         money: ''
       },
-      rules: {
-        telphone: [
-          {
-            required: true,
-            message: '请输入充值手机号',
-            trigger: 'blur'
-          },
-          { type: 'number', message: '生产数量必须为数字值' }
-        ],
-        money: [
-          {
-            required: true,
-            message: '请输入充值金额',
-            trigger: 'blur'
-          },
-          { type: 'number', message: '充值金额必须为数字值' }
-        ]
-      }
+      rules: {}
     }
   },
   methods: {

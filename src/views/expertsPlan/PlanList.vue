@@ -3,17 +3,7 @@
     <el-row type="flex" justify="space-between" style="margin-bottom: 20px">
       <el-col :span="20">
         <el-form :inline="true" class="demo-form-inline">
-          <el-form-item label="商品分类">
-            <el-select v-model="queryInfo.type" placeholder="请选择">
-              <el-option label="全部" value="-1" />
-              <el-option label="公告" value="1" />
-              <el-option label="资金相关" value="2" />
-              <el-option label="竞猜相关" value="3" />
-              <el-option label="领奖规则" value="4" />
-              <el-option label="领奖攻略" value="5" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="商品名称">
+          <el-form-item label="标题">
             <el-input placeholder />
           </el-form-item>
           <el-form-item>
@@ -27,16 +17,19 @@
     </el-row>
     <el-table v-loading="listLoading" :data="tableData" border style="width: 100%">
       <el-table-column align="center" type="index" width="80px" />
-      <el-table-column prop="title" label="标题" align="center" />
-      <el-table-column prop="url" label="分类" align="center" />
+      <el-table-column prop="title" label="推荐标题" align="center" />
+      <el-table-column prop="url" label="比赛信息" align="center" />
+      <el-table-column prop="path" label="联赛信息" align="center" />
+      <el-table-column prop="time" label="比赛队伍" align="center" />
+      <el-table-column prop="time" label="比赛时间" align="center" />
+      <el-table-column prop="time" label="竞猜内容" align="center" />
+      <el-table-column prop="time" label="预猜结果" align="center" />
+      <el-table-column prop="time" label="竞猜结果" align="center" />
+      <el-table-column prop="time" label="是否可查看" align="center" />
+      <el-table-column prop="time" label="可查看等级" align="center" />
       <el-table-column prop="time" label="时间" align="center" />
-      <el-table-column prop="path" label="排序号" align="center" />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row, $index}">
-          <span class="pointer-span">
-            <i class="el-icon-edit" />
-            <span class="blue-text" @click="modifyVideo(row, $index)">修改</span>
-          </span>
           <span class="pointer-span" style="margin-left: 20px">
             <i class="el-icon-circle-close" />
             <span class="gray-text" @click="deleteVideo(row, $index)">删除</span>
@@ -56,42 +49,56 @@
       />
     </el-row>
 
-    <el-dialog :title="dialogTitle" :visible.sync="isShowAdd" width="750px">
-      <el-form ref="articalForm" :model="articalForm" :rules="rules">
-        <el-form-item label="标题名称：" prop="title" :label-width="formLabelWidth">
-          <el-input v-model="articalForm.title" autocomplete="off" style="width: 200px" />
+    <el-dialog :title="dialogTitle" :visible.sync="isShowAdd">
+      <el-form ref="articalForm" :inline="true" :model="articalForm" :rules="rules">
+        <el-form-item label="推荐标题：" prop="title">
+          <el-input v-model="articalForm.title" autocomplete="off" style="width: 300px" />
         </el-form-item>
-        <el-form-item label="商品分类" prop="classify" :label-width="formLabelWidth">
-          <el-select v-model="queryInfo.classify" placeholder="请选择">
-            <el-option label="公告" value="1" />
-            <el-option label="资金相关" value="2" />
-            <el-option label="竞猜相关" value="3" />
-            <el-option label="领奖规则" value="4" />
-            <el-option label="领奖攻略" value="5" />
+        <el-form-item label="获取佣金：" prop="brokerage">
+          <el-input v-model.number="articalForm.brokerage" autocomplete="off" style="width: 300px" />
+        </el-form-item>
+        <el-form-item label="是否可看：" prop="canSee">
+          <el-radio-group v-model="articalForm.canSee">
+            <el-radio :label="0">是</el-radio>
+            <el-radio :label="1">否</el-radio>
+          </el-radio-group>
+          <el-select
+            v-if="articalForm.canSee === 1"
+            v-model="articalForm.free"
+            style="width: 200px;margin-left: 30px"
+          >
+            <el-option label="青铜以上会员免费" :value="0" />
+            <el-option label="白银以上会员免费" :value="1" />
+            <el-option label="黄金以上会员免费" :value="2" />
+            <el-option label="白金以上会员免费" :value="3" />
+            <el-option label="钻石以上会员免费" :value="4" />
           </el-select>
         </el-form-item>
-        <el-form-item label="图片：" :label-width="formLabelWidth">
-          <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
-            list-type="picture-card"
-            :limit="1"
-            :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove"
-          >
-            <i class="el-icon-plus" />
-          </el-upload>
-          <el-dialog :visible.sync="dialogVisible">
-            <img width="100%" :src="dialogImageUrl" alt>
-          </el-dialog>
+        <el-form-item label="选择比赛：" border prop="competition">
+          <el-table :data="gameList" border style="width: 800px">
+            <!-- <el-table-column type="expand">
+              <template slot-scope="props">
+
+              </template>
+            </el-table-column>-->
+            <el-table-column label="联赛名称" prop="name" />
+            <el-table-column label="对阵队伍" prop="team" />
+            <el-table-column label="开始时间" prop="beginTime" />
+            <el-table-column label="竞猜内容" prop="content" />
+            <el-table-column label="选项">
+              <template slot-scope="{row}">
+                <el-radio-group v-model="row.selectedGame">
+                  <el-radio v-for="(item, key) in row.options" :key="key" :label="key">{{ item.name }}</el-radio>
+                </el-radio-group>
+              </template>
+            </el-table-column>
+          </el-table>
         </el-form-item>
-        <el-form-item label="文章内容：" prop="desc" :label-width="formLabelWidth">
-          <tinymce v-model="articalForm.desc" :height="300" />
+        <el-form-item label="推荐原因：" prop="reason">
+          <tinymce v-model="articalForm.reason" :height="200" />
         </el-form-item>
-        <el-form-item label="排序号：" prop="sortNum" :label-width="formLabelWidth">
-          <el-input v-model.number="articalForm.sortNum" autocomplete="off" style="width: 200px" />
-        </el-form-item>
-        <el-form-item label="发布日期：" prop="publicDate" :label-width="formLabelWidth">
-          <el-date-picker v-model="articalForm.publicDate" type="date" placeholder="选择日期" />
+        <el-form-item label="专家观点：" prop="opinion">
+          <tinymce v-model="articalForm.opinion" :height="200" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -108,9 +115,7 @@ export default {
   components: { Tinymce },
   data() {
     return {
-      formLabelWidth: '120px',
-      queryInfo: {},
-      dialogTitle: '新增文章',
+      dialogTitle: '新增方案',
       listLoading: false,
       tableData: [
         {
@@ -162,49 +167,60 @@ export default {
           time: '202005184232'
         }
       ],
+      gameList: [
+        {
+          name: '英雄联盟LPL',
+          team: '	伦敦喷火战斗机队c VS',
+          beginTime: '2020-06-04 10:00:07',
+          content: '获得比赛胜利',
+          selectedGame: '',
+          options: [{ name: '伦敦喷火战斗机' }, { name: '上海龙之队c' }]
+        }
+      ],
       isShowAdd: false,
       articalForm: {
         title: '',
-        classify: '',
-        url: '',
-        desc: '',
-        sortNum: '',
-        publicDate: ''
+        brokerage: '',
+        canSee: 0,
+        free: 2,
+        competition: '',
+        reason: '',
+        opinion: ''
       },
       rules: {
         title: [
           {
             required: true,
-            message: '请输入标题',
+            message: '请输入推荐标题',
             trigger: 'blur'
           }
         ],
-        classify: [
+        brokerage: [
           {
             required: true,
-            message: '请选择内容分类',
-            trigger: 'blur'
-          }
-        ],
-        desc: [
-          {
-            required: true,
-            message: '请输入文章内容',
-            trigger: 'blur'
-          }
-        ],
-        sortNum: [
-          {
-            required: true,
-            message: '请输入排序号',
+            message: '请输入获得佣金',
             trigger: 'blur'
           },
-          { type: 'number', message: '排序号必须为数字值' }
+          { type: 'number', message: '获得佣金必须为数字值' }
         ],
-        publicDate: [
+        competition: [
           {
             required: true,
-            message: '请选择发布日期',
+            message: '请选择比赛',
+            trigger: 'blur'
+          }
+        ],
+        reason: [
+          {
+            required: true,
+            message: '请输入推荐原因',
+            trigger: 'blur'
+          }
+        ],
+        opinion: [
+          {
+            required: true,
+            message: '请输入专家观点',
             trigger: 'blur'
           }
         ]
@@ -232,7 +248,7 @@ export default {
       this.dialogTitle = '修改文章'
     },
     addArtical() {
-      this.dialogTitle = '新增文章'
+      this.dialogTitle = '新增方案'
       this.isShowAdd = true
     },
     saveVideo(formName) {

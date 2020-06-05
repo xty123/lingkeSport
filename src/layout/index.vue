@@ -6,8 +6,8 @@
       <navbar />
     </div>
     <div :class="{hasTagsView:needTagsView}" class="main-container">
-      <tags-view v-if="needTagsView" class="tags-router" />
       <app-main />
+      <tags-view v-if="needTagsView" class="tags-router" />
       <right-panel v-if="showSettings">
         <settings />
       </right-panel>

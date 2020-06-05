@@ -297,6 +297,66 @@ export const constantRoutes = [
         component: () => import('@/views/contentManagement/VideoInformation')
       }
     ]
+  },
+  // ------------------------------直播管理----------------------------------
+  {
+    path: '/liveManagement',
+    name: 'liveManagement',
+    redirect: '/liveManagement/officialLive',
+    component: Layout,
+    meta: { title: '直播管理', icon: 'zhibo' },
+    children: [
+      {
+        path: '/liveManagement/officialLive',
+        name: 'officialLive',
+        meta: { title: '官方直播列表' },
+        component: () => import('@/views/liveManagement/OfficialLive')
+      },
+      {
+        path: '/liveManagement/thirdPartyLive',
+        name: 'thirdPartyLive',
+        meta: { title: '三方直播列表' },
+        component: () => import('@/views/liveManagement/ThirdPartyLive')
+      }
+    ]
+  },
+  // ------------------------------主播管理----------------------------------
+  {
+    path: '/anchorManagement',
+    name: 'anchorManagement',
+    redirect: '/anchorManagement/anchorList',
+    component: Layout,
+    meta: { title: '主播管理', icon: 'zhubo' },
+    children: [
+      {
+        path: '/anchorManagement/anchorList',
+        name: 'anchorList',
+        meta: { title: '主播列表' },
+        component: () => import('@/views/anchorManagement/AnchorList')
+      }
+    ]
+  },
+  // ------------------------------专家方案----------------------------------
+  {
+    path: '/expertsPlan',
+    name: 'expertsPlan',
+    redirect: '/expertsPlan/expertsList',
+    component: Layout,
+    meta: { title: '专家方案', icon: 'zhuanjia' },
+    children: [
+      {
+        path: '/expertsPlan/expertsList',
+        name: 'expertsList',
+        meta: { title: '专家列表' },
+        component: () => import('@/views/expertsPlan/ExpertsList')
+      },
+      {
+        path: '/expertsPlan/planList',
+        name: 'planList',
+        meta: { title: '方案列表' },
+        component: () => import('@/views/expertsPlan/PlanList')
+      }
+    ]
   }
 ]
 
