@@ -27,15 +27,17 @@
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
           <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">&nbsp;
-          <span>{{ roles[0] }}</span>
+          <span style="margin: 0 15px">{{ roles[0] }}</span>
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>
-            <span style="display:block;">密码修改</span>
+          <el-dropdown-item @click.native="modifyPassword">
+            <i class="el-icon-lock" />
+            <span>密码修改</span>
           </el-dropdown-item>
           <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">Log Out</span>
+            <i class="el-icon-switch-button" />
+            <span>退出登录</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -59,11 +61,16 @@ export default {
     Screenfull,
     Search
   },
+
   computed: {
     ...mapGetters(['sidebar', 'avatar', 'device', 'name', 'roles'])
   },
   mounted() {},
   methods: {
+    modifyPassword() {
+      this.$emit('showModifyPassword')
+    },
+
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
@@ -81,7 +88,6 @@ export default {
   overflow: hidden;
   position: relative;
   background: #fff;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   border-bottom: 1px solid #e5e5e5;
 
   .hamburger-container {

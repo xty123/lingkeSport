@@ -1,8 +1,9 @@
 // base color
 $blue:#1890FF;
-$red:#E7505A;
-$gray: #AABCC9;
-$yellow: #E49148;
+$red:#ff4949;
+$gray: #8E9197;
+$yellow: #ffba00;
+$green: #67C23A;
 
 .container {
     padding: 20px;
@@ -24,4 +25,7 @@ $yellow: #E49148;
 }
 .yellow-text{
     color: $yellow;
+}
+.green-text{
+    color: $green;
 }

@@ -36,18 +36,37 @@
         <el-table-column prop="phone" label="豆苗分" align="center" />
         <el-table-column prop="realName" label="销售数" align="center" />
         <el-table-column prop="agentTel" label="库存数" align="center" />
-        <el-table-column prop="orderTime" label="是否推荐" align="center" />
-        <el-table-column prop="status" label="状态" align="center" width="200px" />
-        <el-table-column label="操作" align="center" width="160px">
+        <el-table-column label="是否推荐" align="center">
+          <template slot-scope="{row}">
+            <span>{{ row.isRecommend == '1' ? '是' : '否' }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="status" label="状态" align="center">
+          <template slot-scope="{row}">
+            <span :class="row.status == '上架' ? '' : 'red-text'">{{ row.status }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center" width="220px">
           <template slot-scope="{row, $index}">
             <span class="pointer-span">
+              <i class="el-icon-edit blue-text" />
               <span class="blue-text" @click="modifyProduct(row, $index)">修改</span>
             </span>
-            <span class="pointer-span" style="margin-left: 20px">
-              <span class="blue-text">下架</span>
+            <span v-if="row.status == '上架'" class="pointer-span" style="margin-left: 10px">
+              <svg-icon icon-class="xiajia" />
+              <span>下架</span>
             </span>
-            <span class="pointer-span" style="margin-left: 20px">
-              <span class="blue-text">推荐</span>
+            <span v-if="row.status == '下架'" class="pointer-span" style="margin-left: 10px">
+              <svg-icon icon-class="shangjia" />
+              <span class="green-text">上架</span>
+            </span>
+            <span v-if="row.isRecommend == '0'" class="pointer-span" style="margin-left: 10px">
+              <i class="el-icon-star-off yellow-text" />
+              <span class="yellow-text">推荐</span>
+            </span>
+            <span v-if="row.isRecommend == '1'" class="pointer-span" style="margin-left: 10px">
+              <i class="el-icon-star-off gray-text" />
+              <span class="gray-text">取消推荐</span>
             </span>
           </template>
         </el-table-column>
@@ -93,7 +112,8 @@ export default {
           recipients: '蒲先生 13647452447 上海市上海市浦东新区民生路',
           amount: '8',
           paymentBean: '271.69',
-          status: '上架'
+          status: '上架',
+          isRecommend: '0'
         },
         {
           order: '202005291911024944869',
@@ -107,7 +127,8 @@ export default {
           recipients: '蒲先生 13647452447 上海市上海市浦东新区民生路',
           amount: '8',
           paymentBean: '271.69',
-          status: '上架'
+          status: '下架',
+          isRecommend: '0'
         },
         {
           order: '202005291911024944869',
@@ -121,7 +142,8 @@ export default {
           recipients: '蒲先生 13647452447 上海市上海市浦东新区民生路',
           amount: '8',
           paymentBean: '271.69',
-          status: '上架'
+          status: '上架',
+          isRecommend: '0'
         },
         {
           order: '202005291911024944869',
@@ -135,7 +157,8 @@ export default {
           recipients: '蒲先生 13647452447 上海市上海市浦东新区民生路',
           amount: '8',
           paymentBean: '271.69',
-          status: '上架'
+          status: '上架',
+          isRecommend: '1'
         },
         {
           order: '202005291911024944869',
@@ -149,7 +172,8 @@ export default {
           recipients: '蒲先生 13647452447 上海市上海市浦东新区民生路',
           amount: '8',
           paymentBean: '271.69',
-          status: '上架'
+          status: '上架',
+          isRecommend: '0'
         },
         {
           order: '202005291911024944869',
@@ -163,7 +187,8 @@ export default {
           recipients: '蒲先生 13647452447 上海市上海市浦东新区民生路',
           amount: '8',
           paymentBean: '271.69',
-          status: '上架'
+          status: '上架',
+          isRecommend: '0'
         },
         {
           order: '202005291911024944869',
@@ -177,7 +202,8 @@ export default {
           recipients: '蒲先生 13647452447 上海市上海市浦东新区民生路',
           amount: '8',
           paymentBean: '271.69',
-          status: '上架'
+          status: '上架',
+          isRecommend: '0'
         }
       ]
     }

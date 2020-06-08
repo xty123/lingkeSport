@@ -32,22 +32,33 @@
       <el-table-column prop="name" label="户名" align="center" />
       <el-table-column prop="account" label="账号" align="center" />
       <el-table-column prop="openingBank " label="开户行" align="center" />
-      <el-table-column prop="status" label="状态" align="center" />
+      <el-table-column prop="status" label="状态" align="center">
+        <template slot-scope="{row}">
+          <el-switch
+            :value="row.status"
+            active-value="正常"
+            inactive-value="禁用"
+            @change="statusChange(row, $event)"
+          />&nbsp;
+          <el-tag
+            size="small"
+            effect="plain"
+            :type="row.status == '禁用' ? 'info': 'success' "
+          >{{ row.status }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="{row, $index}">
           <span class="pointer-span">
-            <i class="el-icon-edit" />
+            <i class="el-icon-edit blue-text" />
             <span class="blue-text" @click="modifyTool(row, $index)">修改</span>
-          </span>
-          <span class="pointer-span" style="margin-left: 20px">
-            <i class="el-icon-circle-close" />
-            <span class="gray-text">禁用</span>
           </span>
         </template>
       </el-table-column>
     </el-table>
     <el-row type="flex" justify="end" style="margin-top: 20px">
       <el-pagination
+        background
         :current-page="1"
         :page-sizes="[100, 200, 300, 400]"
         :page-size="100"
@@ -114,7 +125,7 @@ export default {
           name: '支付宝',
           account: '1234131231',
           openingBank: '',
-          status: '正常'
+          status: '禁用'
         },
         {
           tool: '支付宝',
@@ -157,6 +168,26 @@ export default {
     }
   },
   methods: {
+    statusChange(row, event) {
+      this.$confirm('您确定要执行此操作吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          row.status = event
+          this.$message({
+            type: 'success',
+            message: '操作成功!'
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消该操作！'
+          })
+        })
+    },
     modifyTool(row, index) {
       this.dialogTitle = '修改收款工具'
       this.isShowAdd = true

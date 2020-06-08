@@ -11,7 +11,7 @@
           <count-to :start-val="0" :end-val="1000" :duration="600" class="card-panel-num" />
         </div>
         <div>
-          <el-button type="primary">充值</el-button>
+          <el-button type="primary" @click="isShowDialog = true">充值</el-button>
         </div>
       </div>
       <div
@@ -20,8 +20,8 @@
       >
         <div class="card-panel-description">
           <div class="card-panel-text">警戒值</div>
-          <count-to :start-val="0" :end-val="5" :duration="100" class="card-panel-num" />
-          <span class="card-panel-num">.00%</span>
+          <span class="card-panel-num">5.23</span>
+          <span class="card-panel-num">%</span>
         </div>
         <div
           style="width: 200px;background:rgba(255,244,234,1);color:rgba(228,145,72,1);padding: 10px;line-height: 20px;border-radius:4px;text-align:left"
@@ -55,17 +55,39 @@
               <el-col
                 v-for="(item, index) in order.dataList"
                 :key="index"
-                :span="4"
+                :span="3"
                 style="text-align:center"
               >
                 <div class="sum-text" :style="{color: order.color}">{{ item.sum }}</div>
                 <div class="name-text">{{ item.name }}</div>
+                <div
+                  v-if="item.name == '做单总额'"
+                  class="name-text"
+                  style="font-size: 12px;margin-top: 10px"
+                >（含2%手续费：0.0）</div>
               </el-col>
             </el-row>
           </el-card>
         </div>
       </div>
     </div>
+
+    <el-dialog title="充值保证金" :visible.sync="isShowDialog" width="500px">
+      <div class="red-text" style="margin: 0 0 20px 20px">商户充值 请联系客服获取转账账号</div>
+      <el-form ref="giftForm" :model="giftForm" :rules="rules">
+        <el-form-item label="账号：" :label-width="formLabelWidth">
+          <span>{{ giftForm.account }}</span>
+        </el-form-item>
+        <el-form-item label="充值金额：" prop="money" :label-width="formLabelWidth">
+          <el-input v-model="giftForm.money" autocomplete="off" style="width: 200px" />
+          <div class="red-text">最低充值金额1000元</div>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="saveGift('giftForm')">保存</el-button>
+        <el-button @click="isShowAdd = false">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -77,6 +99,7 @@ export default {
   },
   data() {
     return {
+      isShowDialog: false,
       orderList: [
         {
           type: '今日做单',
@@ -84,40 +107,72 @@ export default {
           dataList: [
             { name: '注册人数', sum: '100' },
             { name: '入金总额', sum: '10.2w' },
-            { name: '出金总额', sum: '1.5w' },
-            { name: '做单数', sum: '280' },
+            { name: '领取红包', sum: '10.2w' },
             { name: '做单总额', sum: '10.1w' },
-            { name: '冻结资金', sum: '0.2w' }
+            { name: '做单数', sum: '280' },
+            { name: '用户盈利', sum: '280' },
+            { name: '冻结资金', sum: '0.2w' },
+            { name: '已出金总额', sum: '1.5w' }
           ]
         },
         {
           type: '本月做单',
           color: '#67C2D0',
           dataList: [
-            { name: '注册人数', sum: '1500' },
-            { name: '入金总额', sum: '22.5w' },
-            { name: '出金总额', sum: '40.0w' },
-            { name: '做单数', sum: '4300' },
-            { name: '做单总额', sum: '30.3w' },
-            { name: '冻结资金', sum: '10.0w' }
+            { name: '注册人数', sum: '100' },
+            { name: '入金总额', sum: '10.2w' },
+            { name: '领取红包', sum: '10.2w' },
+            { name: '做单总额', sum: '10.1w' },
+            { name: '做单数', sum: '280' },
+            { name: '用户盈利', sum: '280' },
+            { name: '冻结资金', sum: '0.2w' },
+            { name: '已出金总额', sum: '1.5w' }
           ]
         },
         {
           type: '全部做单',
           color: '#3775D1',
           dataList: [
-            { name: '注册人数', sum: '10.3w' },
-            { name: '入金总额', sum: '200.3w' },
-            { name: '出金总额', sum: '60.3w' },
-            { name: '做单数', sum: '50.2w' },
-            { name: '做单总额', sum: '50.5w' },
-            { name: '冻结资金', sum: '30.5w' }
+            { name: '注册人数', sum: '100' },
+            { name: '入金总额', sum: '10.2w' },
+            { name: '领取红包', sum: '10.2w' },
+            { name: '做单总额', sum: '10.1w' },
+            { name: '做单数', sum: '280' },
+            { name: '用户盈利', sum: '280' },
+            { name: '冻结资金', sum: '0.2w' },
+            { name: '已出金总额', sum: '1.5w' }
           ]
         }
-      ]
+      ],
+      giftForm: {
+        account: '15357777797',
+        money: ''
+      },
+      rules: {
+        money: [
+          {
+            required: true,
+            message: '请输入充值金额',
+            trigger: 'blur'
+          },
+          { type: 'number', message: '充值金额必须为数字值' }
+        ]
+      },
+      formLabelWidth: '120px'
     }
   },
-  methods: {}
+  methods: {
+    saveGift(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.isShowAdd = false
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    }
+  }
 }
 </script>
 

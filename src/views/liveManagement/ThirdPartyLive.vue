@@ -24,7 +24,7 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="{row, $index}">
           <span class="pointer-span">
-            <i class="el-icon-edit" />
+            <i class="el-icon-edit blue-text" />
             <span class="blue-text" @click="modifyVideo(row, $index)">修改</span>
           </span>
         </template>

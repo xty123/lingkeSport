@@ -1,14 +1,14 @@
 <template>
-  <div class="container">
+  <div>
     <el-row v-if="!isShowDetail" style="display: flex">
       <el-tree
-        style="min-width: 250px;margin: 58px 20px 0 0;background: #e5e5e5;"
+        style="min-width: 250px;margin: 0 20px 0 0;background: #fff;padding: 30px 10px"
         :data="treeData"
         :props="defaultProps"
         :default-expand-all="true"
         @node-click="handleNodeClick"
       />
-      <div style="flex:9;overflow: auto">
+      <div style="flex:9;background: #fff;overflow: auto;padding: 50px 30px">
         <el-form :inline="true" class="demo-form-inline">
           <el-form-item label="代理商电话">
             <el-input placeholder />
@@ -51,11 +51,11 @@
           <el-table-column fixed="right" label="操作" align="center" width="260">
             <template slot-scope="{row, $index}">
               <span class="pointer-span">
-                <i class="el-icon-edit" />
+                <i class="el-icon-edit blue-text" />
                 <span class="blue-text" @click="toDetail(row, $index)">直推用户详情</span>
               </span>
               <span class="pointer-span" style="margin-left: 20px">
-                <i class="el-icon-edit" />
+                <i class="el-icon-edit blue-text" />
                 <span class="blue-text" @click="showModifyPassword(row, $index)">修改密码</span>
               </span>
             </template>
@@ -219,13 +219,5 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/styles/common.scss";
-.container {
-  padding: 20px 20px 20px 0;
-}
-.demo-ruleForm {
-  width: 40%;
-  min-width: 300px;
-  margin: 50px auto;
-}
 </style>
 

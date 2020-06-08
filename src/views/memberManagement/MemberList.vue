@@ -34,7 +34,14 @@
       <el-table-column prop="agentTel" label="冻结豆苗" align="center" />
       <el-table-column prop="orderTime" label="充值总额" align="center" />
       <el-table-column label="状态" align="center">
-        <template slot-scope="{row}">{{ row.status }}</template>
+        <template slot-scope="{row}">
+          <span v-if="row.status == '其他'">{{ row.status }}</span>
+          <el-tag
+            v-else
+            size="small"
+            :type="row.status == '正常' ? 'success': row.status == '禁用' ? 'danger' : row.status == '未实名' ? 'warning' : ''"
+          >{{ row.status }}</el-tag>
+        </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="100px">
         <template />
@@ -73,7 +80,7 @@ export default {
           recipients: '蒲先生 13647452447 上海市上海市浦东新区民生路',
           amount: '8',
           paymentBean: '271.69',
-          status: '已收货'
+          status: '其他'
         },
         {
           order: '202005291911024944869',
@@ -87,7 +94,7 @@ export default {
           recipients: '蒲先生 13647452447 上海市上海市浦东新区民生路',
           amount: '8',
           paymentBean: '271.69',
-          status: '待审核'
+          status: '正常'
         },
         {
           order: '202005291911024944869',
@@ -101,7 +108,7 @@ export default {
           recipients: '蒲先生 13647452447 上海市上海市浦东新区民生路',
           amount: '8',
           paymentBean: '271.69',
-          status: '已发货'
+          status: '禁用'
         },
         {
           order: '202005291911024944869',
@@ -115,7 +122,7 @@ export default {
           recipients: '蒲先生 13647452447 上海市上海市浦东新区民生路',
           amount: '8',
           paymentBean: '271.69',
-          status: '已取消'
+          status: '已实名'
         },
         {
           order: '202005291911024944869',
@@ -129,7 +136,7 @@ export default {
           recipients: '蒲先生 13647452447 上海市上海市浦东新区民生路',
           amount: '8',
           paymentBean: '271.69',
-          status: '已收货'
+          status: '未实名'
         },
         {
           order: '202005291911024944869',
@@ -143,7 +150,7 @@ export default {
           recipients: '蒲先生 13647452447 上海市上海市浦东新区民生路',
           amount: '8',
           paymentBean: '271.69',
-          status: '待审核'
+          status: '其他'
         },
         {
           order: '202005291911024944869',
@@ -157,7 +164,7 @@ export default {
           recipients: '蒲先生 13647452447 上海市上海市浦东新区民生路',
           amount: '8',
           paymentBean: '271.69',
-          status: '待审核'
+          status: '其他'
         }
       ]
     }

@@ -34,12 +34,12 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="{row, $index}">
           <span class="pointer-span">
-            <i class="el-icon-edit" />
+            <i class="el-icon-edit blue-text" />
             <span class="blue-text" @click="modifyVideo(row, $index)">修改</span>
           </span>
           <span class="pointer-span" style="margin-left: 20px">
-            <i class="el-icon-circle-close" />
-            <span class="gray-text" @click="deleteVideo(row, $index)">删除</span>
+            <i class="el-icon-delete red-text" />
+            <span class="red-text" @click="deleteVideo(row, $index)">删除</span>
           </span>
         </template>
       </el-table-column>
@@ -110,7 +110,7 @@ export default {
     return {
       formLabelWidth: '120px',
       queryInfo: {},
-      dialogTitle: '新增文章',
+      dialogTitle: '新增',
       listLoading: false,
       tableData: [
         {
@@ -229,10 +229,10 @@ export default {
     modifyVideo(row, index) {
       this.isShowAdd = true
       this.articalForm = JSON.parse(JSON.stringify(row))
-      this.dialogTitle = '修改文章'
+      this.dialogTitle = '修改'
     },
     addArtical() {
-      this.dialogTitle = '新增文章'
+      this.dialogTitle = '新增'
       this.isShowAdd = true
     },
     saveVideo(formName) {

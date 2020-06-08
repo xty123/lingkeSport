@@ -31,14 +31,15 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="{row, $index}">
           <span class="pointer-span" style="margin-left: 20px">
-            <i class="el-icon-circle-close" />
-            <span class="gray-text" @click="deleteVideo(row, $index)">删除</span>
+            <i class="el-icon-delete red-text" />
+            <span class="red-text" @click="deleteVideo(row, $index)">删除</span>
           </span>
         </template>
       </el-table-column>
     </el-table>
     <el-row type="flex" justify="end" style="margin-top: 20px">
       <el-pagination
+        background
         :current-page="1"
         :page-sizes="[100, 200, 300, 400]"
         :page-size="100"
@@ -50,7 +51,13 @@
     </el-row>
 
     <el-dialog :title="dialogTitle" :visible.sync="isShowAdd">
-      <el-form ref="articalForm" :inline="true" :model="articalForm" :rules="rules">
+      <el-form
+        ref="articalForm"
+        :inline="true"
+        :model="articalForm"
+        :rules="rules"
+        label-width="100px"
+      >
         <el-form-item label="推荐标题：" prop="title">
           <el-input v-model="articalForm.title" autocomplete="off" style="width: 300px" />
         </el-form-item>
@@ -88,11 +95,26 @@
             <el-table-column label="选项">
               <template slot-scope="{row}">
                 <el-radio-group v-model="row.selectedGame">
-                  <el-radio v-for="(item, key) in row.options" :key="key" :label="key">{{ item.name }}</el-radio>
+                  <el-radio
+                    v-for="(item, key) in row.options"
+                    :key="key"
+                    :label="key"
+                  >{{ item.name }}</el-radio>
                 </el-radio-group>
               </template>
             </el-table-column>
           </el-table>
+          <el-pagination
+            style="margin-top: 20px"
+            background
+            :current-page="1"
+            :page-sizes="[100, 200, 300, 400]"
+            :page-size="100"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="400"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
         </el-form-item>
         <el-form-item label="推荐原因：" prop="reason">
           <tinymce v-model="articalForm.reason" :height="200" />

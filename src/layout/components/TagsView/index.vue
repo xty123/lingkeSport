@@ -209,12 +209,6 @@ export default {
 @import "~@/styles/mixin.scss";
 @import "~@/styles/variables.scss";
 .tags-view-container {
-  position: fixed;
-  top: 50px;
-  right: 0;
-  background: #fff;
-  z-index: 99;
-  width: 100vw;
   height: 34px;
   background: #fff;
   border-bottom: 1px solid #d8dce5;

@@ -17,12 +17,12 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="{row, $index}">
           <span class="pointer-span">
-            <i class="el-icon-edit" />
+            <i class="el-icon-edit blue-text" />
             <span class="blue-text" @click="modifyBanner(row, $index)">修改</span>
           </span>
           <span class="pointer-span" style="margin-left: 20px">
-            <i class="el-icon-circle-close" />
-            <span class="gray-text" @click="deleteBanner(row, $index)">删除</span>
+            <i class="el-icon-delete red-text" />
+            <span class="red-text" @click="deleteBanner(row, $index)">删除</span>
           </span>
         </template>
       </el-table-column>

@@ -8,27 +8,38 @@
       <el-table-column prop="name" label="名称" align="center" />
       <el-table-column prop="type" label="类型" align="center" />
       <el-table-column prop="account" label="科豆" align="center" />
-      <el-table-column prop="status" label="状态" align="center" />
+      <el-table-column prop="status" label="状态" align="center">
+        <template slot-scope="{row}">
+          <el-switch
+            :value="row.status"
+            active-value="正常"
+            inactive-value="禁用"
+            @change="statusChange(row, $event)"
+          />&nbsp;
+          <el-tag
+            size="small"
+            effect="plain"
+            :type="row.status == '禁用' ? 'info': 'success' "
+          >{{ row.status }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="{row, $index}">
           <span class="pointer-span">
-            <i class="el-icon-edit" />
+            <i class="el-icon-edit blue-text" />
             <span class="blue-text" @click="modifyGift(row, $index)">修改</span>
-          </span>
-          <span class="pointer-span" style="margin-left: 20px">
-            <i class="el-icon-circle-close" />
-            <span class="gray-text">禁用</span>
           </span>
         </template>
       </el-table-column>
     </el-table>
     <el-row type="flex" justify="end" style="margin-top: 20px">
       <el-pagination
-        :current-page="1"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
+        background
+        :current-page="pagination.currentPage"
+        :page-sizes="pagination.pageSizeList"
+        :page-size="pagination.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
+        :total="pagination.total"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
@@ -40,15 +51,6 @@
           <el-input v-model="giftForm.name" autocomplete="off" style="width: 200px" />
         </el-form-item>
         <el-form-item label="图片" :label-width="formLabelWidth">
-          <!-- <el-upload
-            class="upload-demo"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :limit="1"
-            :on-change="handlePic"
-            :show-file-list="false"
-          >
-            <el-button size="small" type="primary">点击上传</el-button>
-          </el-upload>-->
           <el-upload
             action="https://jsonplaceholder.typicode.com/posts/"
             list-type="picture-card"
@@ -86,13 +88,19 @@ export default {
     return {
       dialogTitle: '新增礼品',
       listLoading: false,
+      pagination: {
+        currentPage: 1,
+        pageSizeList: [5, 10, 20, 50],
+        pageSize: 10,
+        total: 0
+      },
       tableData: [
         {
           type: '普通',
           name: '点赞',
           account: '支付宝',
           openingBank: '',
-          status: '正常'
+          status: '禁用'
         },
         {
           type: '普通',
@@ -103,29 +111,59 @@ export default {
         },
         {
           type: '动画',
-          name: '王小虎',
+          name: '花',
           account: '支付宝',
           openingBank: '',
           status: '正常'
         },
         {
           type: '普通',
-          name: '王小虎',
+          name: '点赞',
           account: '支付宝',
           openingBank: '',
           status: '正常'
+        },
+        {
+          type: '普通',
+          name: '点赞',
+          account: '支付宝',
+          openingBank: '',
+          status: '禁用'
+        },
+        {
+          type: '普通',
+          name: '气球',
+          account: '支付宝',
+          openingBank: '',
+          status: '正常'
+        },
+        {
+          type: '动画',
+          name: '花',
+          account: '支付宝',
+          openingBank: '',
+          status: '正常'
+        },
+        {
+          type: '普通',
+          name: '点赞',
+          account: '支付宝',
+          openingBank: '',
+          status: '正常'
+        },
+        {
+          type: '普通',
+          name: '点赞',
+          account: '支付宝',
+          openingBank: '',
+          status: '禁用'
         }
       ],
       isShowAdd: false,
       giftForm: {
         name: '',
         region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+        type: []
       },
       rules: {
         name: [
@@ -141,7 +179,30 @@ export default {
       dialogVisible: false
     }
   },
+  mounted() {
+    this.pagination.total = this.tableData.length
+  },
   methods: {
+    statusChange(row, event) {
+      this.$confirm('您确定要执行此操作吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          row.status = event
+          this.$message({
+            type: 'success',
+            message: '操作成功!'
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消该操作！'
+          })
+        })
+    },
     handleRemove(file, fileList) {
       console.log(file, fileList)
     },
@@ -156,6 +217,7 @@ export default {
     },
     modifyGift(row, index) {
       this.isShowAdd = true
+      this.giftForm = JSON.parse(JSON.stringify(row))
       this.dialogTitle = '修改礼品'
     },
     addGift() {

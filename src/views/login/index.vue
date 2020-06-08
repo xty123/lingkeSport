@@ -1,96 +1,98 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
+    <img src="@/assets/images/home-bg.png" alt style="width: 100vw;height: 360px">
+    <img
+      src="@/assets/images/home-logo.png"
+      alt
+      style="position: absolute;top: 40px;left: 80px;width: 224px;height: 94px;"
+    >
+    <div class="form-box">
+      <el-form
+        ref="loginForm"
+        :model="loginForm"
+        :rules="loginRules"
+        class="login-form"
+        autocomplete="on"
+        label-position="left"
+      >
+        <div class="title-container">
+          <div class="title">用户登录</div>
+        </div>
 
-      <div class="title-container">
-        <h3 class="title">Login Form</h3>
-      </div>
-
-      <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
-        </span>
-        <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
-          name="username"
-          type="text"
-          tabindex="1"
-          autocomplete="on"
-        />
-      </el-form-item>
-
-      <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
-        <el-form-item prop="password">
-          <span class="svg-container">
-            <svg-icon icon-class="password" />
-          </span>
+        <el-form-item prop="username">
           <el-input
-            :key="passwordType"
-            ref="password"
-            v-model="loginForm.password"
-            :type="passwordType"
-            placeholder="Password"
-            name="password"
-            tabindex="2"
+            ref="username"
+            v-model="loginForm.username"
+            placeholder="用户名"
+            name="username"
+            type="text"
+            tabindex="1"
             autocomplete="on"
-            @keyup.native="checkCapslock"
-            @blur="capsTooltip = false"
-            @keyup.enter.native="handleLogin"
-          />
-          <span class="show-pwd" @click="showPwd">
-            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-          </span>
+          >
+            <template slot="prepend">
+              <i class="el-icon-user" />
+            </template>
+          </el-input>
         </el-form-item>
-      </el-tooltip>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
-
-      <div style="position:relative">
-        <div class="tips">
-          <span>Username : admin</span>
-          <span>Password : any</span>
+        <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
+          <el-form-item prop="password" style="margin-bottom: 10px;">
+            <el-input
+              :key="passwordType"
+              ref="password"
+              v-model="loginForm.password"
+              :type="passwordType"
+              placeholder="密码"
+              name="password"
+              tabindex="2"
+              autocomplete="on"
+              @keyup.native="checkCapslock"
+              @blur="capsTooltip = false"
+              @keyup.enter.native="handleLogin"
+            >
+              <template slot="prepend">
+                <i class="el-icon-lock" />
+              </template>
+            </el-input>
+          </el-form-item>
+        </el-tooltip>
+        <div style="text-align: right">
+          <span style="color:#1890ff;cursor: pointer;">忘记密码？</span>
         </div>
-        <div class="tips">
-          <span style="margin-right:18px;">Username : editor</span>
-          <span>Password : any</span>
+        <div style="text-align: center;">
+          <el-button
+            :loading="loading"
+            type="primary"
+            style="margin:20px 0 60px;width: 100px"
+            @click.native.prevent="handleLogin"
+          >登录</el-button>
+          <el-button
+            :loading="loading"
+            style="margin-right:20px ;width: 100px"
+            @click.native.prevent="resetForm"
+          >信息重置</el-button>
         </div>
-
-        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
-          Or connect with
-        </el-button>
-      </div>
-    </el-form>
-
-    <el-dialog title="Or connect with" :visible.sync="showDialog">
-      Can not be simulated on local, so please combine you own business simulation! ! !
-      <br>
-      <br>
-      <br>
-      <social-sign />
-    </el-dialog>
+      </el-form>
+    </div>
   </div>
 </template>
 
 <script>
 import { validUsername } from '@/utils/validate'
-import SocialSign from './components/SocialSignin'
 
 export default {
   name: 'Login',
-  components: { SocialSign },
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
+        callback(new Error('请输入用户名！'))
       } else {
         callback()
       }
     }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+        callback(new Error('请输入密码！'))
       } else {
         callback()
       }
@@ -101,8 +103,12 @@ export default {
         password: '111111'
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        username: [
+          { required: true, trigger: 'blur', validator: validateUsername }
+        ],
+        password: [
+          { required: true, trigger: 'blur', validator: validatePassword }
+        ]
       },
       passwordType: 'password',
       capsTooltip: false,
@@ -138,9 +144,12 @@ export default {
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
+    resetForm() {
+      this.loginForm = { username: '', password: '' }
+    },
     checkCapslock(e) {
       const { key } = e
-      this.capsTooltip = key && key.length === 1 && (key >= 'A' && key <= 'Z')
+      this.capsTooltip = key && key.length === 1 && key >= 'A' && key <= 'Z'
     },
     showPwd() {
       if (this.passwordType === 'password') {
@@ -156,9 +165,13 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm)
+          this.$store
+            .dispatch('user/login', this.loginForm)
             .then(() => {
-              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+              this.$router.push({
+                path: this.redirect || '/',
+                query: this.otherQuery
+              })
               this.loading = false
             })
             .catch(() => {
@@ -202,24 +215,13 @@ export default {
 
 <style lang="scss">
 /* 修复input 背景不协调 和光标变色 */
-/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
+$bg: #283443;
 
-$bg:#283443;
-$light_gray:#fff;
-$cursor: #fff;
-
-@supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
-  .login-container .el-input input {
-    color: $cursor;
-  }
-}
-
-/* reset element-ui css */
 .login-container {
   .el-input {
-    display: inline-block;
+    display: flex;
     height: 47px;
-    width: 85%;
+    align-items: center;
 
     input {
       background: transparent;
@@ -227,42 +229,52 @@ $cursor: #fff;
       -webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
-      color: $light_gray;
       height: 47px;
-      caret-color: $cursor;
-
-      &:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px $bg inset !important;
-        -webkit-text-fill-color: $cursor !important;
-      }
     }
   }
 
   .el-form-item {
     border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
+    background: rgba(236, 237, 239, 1);
     color: #454545;
   }
 }
 </style>
 
 <style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
+$bg: #1890ff;
+$dark_gray: #889aa4;
+
+.form-box /deep/ .el-input-group__prepend {
+  background: $bg;
+  color: #ffffff;
+  line-height: 47px;
+  width: 52px;
+  text-align: center;
+  margin-left: -1px;
+}
 
 .login-container {
   min-height: 100%;
   width: 100%;
-  background-color: $bg;
+  background-color: #ffffff;
   overflow: hidden;
+  position: relative;
 
+  .form-box {
+    position: absolute;
+    left: 50%;
+    top: 280px;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+  }
   .login-form {
     position: relative;
-    width: 520px;
+    width: 580px;
     max-width: 100%;
-    padding: 160px 35px 0;
+    padding: 50px 60px 0;
     margin: 0 auto;
     overflow: hidden;
   }
@@ -292,10 +304,9 @@ $light_gray:#eee;
 
     .title {
       font-size: 26px;
-      color: $light_gray;
+      color: #333333;
       margin: 0px auto 40px auto;
       text-align: center;
-      font-weight: bold;
     }
   }
 

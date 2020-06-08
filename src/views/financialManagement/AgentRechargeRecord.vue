@@ -56,8 +56,9 @@
       </el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="{row}">
-          <span v-if="row.rechargeInfo.agent !== '等待充值'">已充值</span>
-          <span v-else class="pointer-span">
+          <span v-if="row.rechargeInfo.agent !== '等待充值'" class="green-text">已充值</span>
+          <span v-else class="pointer-span" @click="isShowAdd = true">
+            <i class="el-icon-circle-check blue-text" />
             <span class="blue-text">确认充值</span>
           </span>
         </template>
@@ -65,6 +66,7 @@
     </el-table>
     <el-row type="flex" justify="end" style="margin-top: 20px">
       <el-pagination
+        background
         :current-page="1"
         :page-sizes="[100, 200, 300, 400]"
         :page-size="100"
@@ -74,6 +76,30 @@
         @current-change="handleCurrentChange"
       />
     </el-row>
+
+    <el-dialog title="确认充值" :visible.sync="isShowAdd" width="500px">
+      <el-form ref="giftForm" :model="giftForm" :rules="rules">
+        <el-form-item label="充值代理商" :label-width="formLabelWidth">
+          <span>19923495931</span>
+        </el-form-item>
+        <el-form-item label="充值金额" :label-width="formLabelWidth">
+          <span>1000.00</span>
+        </el-form-item>
+        <el-form-item label="实际充值" prop="name" :label-width="formLabelWidth">
+          <el-input v-model="giftForm.beans" autocomplete="off" style="width: 200px" />
+        </el-form-item>
+        <el-form-item label="收款账户" prop="region" :label-width="formLabelWidth">
+          <el-select v-model="giftForm.type" placeholder="请选择">
+            <el-option label="普通" value="普通" />
+            <el-option label="动画" value="动画" />
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="saveGift('giftForm')">保存</el-button>
+        <el-button @click="isShowAdd = false">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -159,10 +185,48 @@ export default {
             time: '2020-05-27 13:24:23'
           }
         }
-      ]
+      ],
+      isShowAdd: false,
+      giftForm: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
+      },
+      rules: {
+        name: [
+          {
+            required: true,
+            message: '请输入名称',
+            trigger: 'blur'
+          }
+        ],
+        region: [
+          {
+            required: true,
+            message: '请选择收款账户',
+            trigger: 'blur'
+          }
+        ]
+      },
+      formLabelWidth: '120px'
     }
   },
   methods: {
+    saveGift(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.isShowAdd = false
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
     },

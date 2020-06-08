@@ -51,7 +51,10 @@ export const constantRoutes = [
         meta: { title: '今日概览', icon: 'dashboard', affix: true }
       }
     ]
-  },
+  }
+]
+
+export const asyncRoutes = [
   // ------------------------------系统管理----------------------------------
   {
     path: '/systemManagement',
@@ -211,7 +214,7 @@ export const constantRoutes = [
     children: [
       {
         path: '/memberManagement/memberList',
-        name: 'memberList',
+        name: 'members',
         meta: { title: '会员列表' },
         component: () => import('@/views/memberManagement/MemberList')
       }
@@ -357,7 +360,9 @@ export const constantRoutes = [
         component: () => import('@/views/expertsPlan/PlanList')
       }
     ]
-  }
+  },
+  // 404 page must be placed at the end !!!
+  { path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () => new Router({

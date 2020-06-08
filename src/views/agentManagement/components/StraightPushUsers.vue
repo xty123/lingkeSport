@@ -50,13 +50,15 @@
       <el-table-column prop="singleTotal" label="科豆余额" align="center" />
       <el-table-column prop="singleTotal" label="豆芽分余额" align="center" />
       <el-table-column prop="singleTotal" label="注册时间" align="center" />
-      <el-table-column fixed="right" label="操作" align="center" width="200px">
+      <el-table-column fixed="right" label="操作" align="center" width="210px">
         <template slot-scope="{row, $index}">
           <span class="pointer-span">
-            <span class="blue-text" @click="toBeansDetail(row, $index)">科豆明细</span>
+            <svg-icon icon-class="douzi" />
+            <span class="yellow-text" @click="toBeansDetail(row, $index)">科豆明细</span>
           </span>
           <span class="pointer-span" style="margin-left: 20px">
-            <span class="blue-text" @click="toBeanSproutDetail(row, $index)">豆芽分明细</span>
+            <svg-icon icon-class="douyafen" />
+            <span class="green-text" @click="toBeanSproutDetail(row, $index)">豆芽分明细</span>
           </span>
         </template>
       </el-table-column>

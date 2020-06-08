@@ -41,20 +41,39 @@
         <template slot-scope="{row}">
           <el-tag
             size="small"
-            :type="row.status == '待审核' ? 'warning' : row.status == '已收货' ? 'success': '' "
+            :type="row.status == '待审核' ? 'warning' : row.status == '已收货' ? 'success': row.status == '已取消' ? 'info':row.status == '待发货' ? 'danger': '' "
           >{{ row.status }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="180px">
+      <el-table-column label="操作" align="center" width="100px">
         <template slot-scope="{row}">
           <span v-if="row.status == '待审核'" class="pointer-span">
-            <span class="blue-text" @click="approve(row)">审核通过</span>
+            <i class="el-icon-circle-check green-text" />
+            <span class="green-text" @click="approve(row)">审核通过</span>
           </span>
-          <span v-if="row.status == '待审核'" class="pointer-span" style="margin-left: 20px">
-            <span class="blue-text" @click="cancel(row)">取消订单</span>
+          <span
+            v-if="row.status == '待审核'"
+            class="pointer-span"
+            style="margin-top: 6px;display:inline-block"
+          >
+            <i class="el-icon-circle-close red-text" />
+            <span class="red-text" @click="cancel(row)">取消订单</span>
           </span>
-          <span v-if="row.status == '已发货'" class="pointer-span" style="margin-left: 20px">
+          <span v-if="row.status == '已发货'" class="pointer-span">
             <span class="blue-text" @click="confirmReceipt(row)">确认收货</span>
+          </span>
+
+          <span v-if="row.status == '待发货'" class="pointer-span">
+            <svg-icon icon-class="fasong" />
+            <span class="yellow-text" @click="approve(row)">立即发货</span>
+          </span>
+          <span
+            v-if="row.status == '待发货'"
+            class="pointer-span"
+            style="margin-top: 6px;display:inline-block"
+          >
+            <i class="el-icon-refresh-left blue-text" />
+            <span class="blue-text" @click="approve(row)">退回重审</span>
           </span>
         </template>
       </el-table-column>
@@ -148,7 +167,7 @@ export default {
           recipients: '蒲先生 13647452447 上海市上海市浦东新区民生路',
           amount: '8',
           paymentBean: '271.69',
-          status: '已收货'
+          status: '待发货'
         },
         {
           order: '202005291911024944869',
@@ -162,7 +181,7 @@ export default {
           recipients: '蒲先生 13647452447 上海市上海市浦东新区民生路',
           amount: '8',
           paymentBean: '271.69',
-          status: '待审核'
+          status: '已取消'
         },
         {
           order: '202005291911024944869',

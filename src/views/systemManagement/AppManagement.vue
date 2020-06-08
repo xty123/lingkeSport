@@ -14,11 +14,11 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="{row, $index}">
           <span class="pointer-span">
-            <i class="el-icon-edit" />
+            <i class="el-icon-edit blue-text" />
             <span class="blue-text" @click="modifyApp(row, $index)">修改</span>
           </span>
           <span class="pointer-span" style="margin-left: 20px">
-            <i class="el-icon-circle-close" />
+            <svg-icon icon-class="ban" />
             <span class="gray-text">禁用</span>
           </span>
         </template>
@@ -57,11 +57,14 @@
           <el-input v-model="appForm.url" autocomplete="off" style="width: 250px" />
         </el-form-item>
         <el-form-item label="是否强制更新" prop="isUpdated" :label-width="formLabelWidth">
-          <el-input v-model="appForm.isUpdated" autocomplete="off" style="width: 250px" />
+          <el-select v-model="appForm.isUpdated" placeholder="请选择">
+            <el-option label="是" value="1" />
+            <el-option label="否" value="0" />
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="saveGift('appForm')">保存</el-button>
+        <el-button type="primary" @click="saveApp('appForm')">保存</el-button>
         <el-button @click="isShowAdd = false">取 消</el-button>
       </div>
     </el-dialog>
@@ -195,7 +198,7 @@ export default {
       this.dialogTitle = '新增App版本'
       this.isShowAdd = true
     },
-    saveGift(formName) {
+    saveApp(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.isShowAdd = false

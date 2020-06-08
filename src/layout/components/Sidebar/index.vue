@@ -5,7 +5,7 @@
       <el-menu
         :default-active="activeMenu"
         :collapse="isCollapse"
-        :unique-opened="false"
+        :unique-opened="true"
         :collapse-transition="false"
         mode="vertical"
       >
@@ -21,36 +21,36 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import Logo from "./Logo";
-import SidebarItem from "./SidebarItem";
-import variables from "@/styles/variables.scss";
+import { mapGetters } from 'vuex'
+import Logo from './Logo'
+import SidebarItem from './SidebarItem'
+import variables from '@/styles/variables.scss'
 
 export default {
   components: { SidebarItem, Logo },
   computed: {
-    ...mapGetters(["permission_routes", "sidebar"]),
+    ...mapGetters(['permission_routes', 'sidebar']),
     activeMenu() {
-      const route = this.$route;
-      const { meta, path } = route;
+      const route = this.$route
+      const { meta, path } = route
       // if set path, the sidebar will highlight the path you set
       if (meta.activeMenu) {
-        return meta.activeMenu;
+        return meta.activeMenu
       }
-      return path;
+      return path
     },
     showLogo() {
-      return this.$store.state.settings.sidebarLogo;
+      return this.$store.state.settings.sidebarLogo
     },
     variables() {
-      return variables;
+      return variables
     },
     isCollapse() {
-      return !this.sidebar.opened;
+      return !this.sidebar.opened
     }
   },
   mounted() {
-    console.log(this.permission_routes);
+    console.log(this.permission_routes)
   }
-};
+}
 </script>
