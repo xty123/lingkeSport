@@ -43,7 +43,6 @@
     </el-form>
     <el-table v-loading="listLoading" :data="tableData" border style="width: 100%">
       <el-table-column align="center" type="index" width="50px" />
-      <el-table-column prop="agent" label="订单号" align="center" />
       <el-table-column prop="tier" label="姓名" align="center" />
       <el-table-column prop="createTime" label="手机号" align="center" />
       <el-table-column prop="balance" label="直推代理" align="center" />
@@ -51,6 +50,7 @@
       <el-table-column prop="availableBalance" label="支付方式" align="center" />
       <el-table-column prop="cashDeposit" label="支付金额" align="center" />
       <el-table-column prop="commissionThan" label="支付状态" align="center" />
+      <el-table-column prop="agent" label="订单号" align="center" />
       <el-table-column prop="promotedNum" label="备注" align="center" />
       <el-table-column prop="phone" label="时间" align="center" />
     </el-table>

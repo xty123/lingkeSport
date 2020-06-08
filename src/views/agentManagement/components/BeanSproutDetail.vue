@@ -38,11 +38,11 @@
     </el-form>
     <el-table :data="tableData" border>
       <el-table-column align="center" type="index" width="50px" />
-      <el-table-column prop="orderNum" label="订单号" align="center" />
       <el-table-column prop="operate" label="操作" align="center" />
       <el-table-column prop="inAndOut" label="收支" align="center" />
       <el-table-column prop="money" label="操作金额" align="center" />
       <el-table-column prop="balance" label="当前余额" align="center" />
+      <el-table-column prop="orderNum" label="订单号" align="center" />
       <el-table-column prop="remark" label="备注" align="center" />
       <el-table-column prop="time" label="时间" align="center" />
     </el-table>

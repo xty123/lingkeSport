@@ -30,9 +30,9 @@
         <el-table-column prop="cashDeposit" label="出入金金额" align="center" />
         <el-table-column prop="alarmValue " label="警戒值" align="center" />
         <el-table-column prop="commissionThan" label="佣金比" align="center" />
-        <el-table-column label="下线代理数" align="center">
+        <el-table-column label="下线代理数" align="center" width="94px">
           <template slot-scope="{row, $index}">
-            <div>{{ row.offlineAgent }}</div>
+            <div>{{ row.offlineAgent }}人</div>
             <el-tag size="mini" class="pointer-span" @click="agentDetail(row, $index)">查看详情</el-tag>
           </template>
         </el-table-column>
