@@ -66,11 +66,7 @@
             style="margin:20px 0 60px;width: 100px"
             @click.native.prevent="handleLogin"
           >登录</el-button>
-          <el-button
-            :loading="loading"
-            style="margin-right:20px ;width: 100px"
-            @click.native.prevent="resetForm"
-          >信息重置</el-button>
+          <el-button style="margin-right:20px ;width: 100px" @click.native.prevent="resetForm">信息重置</el-button>
         </div>
       </el-form>
     </div>

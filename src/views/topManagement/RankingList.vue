@@ -3,8 +3,16 @@
     <el-row type="flex" justify="space-between" style="margin-bottom: 20px">
       <el-col :span="20">
         <el-form :inline="true">
-          <el-form-item label="手机号码">
-            <el-input v-model="queryInfo.userName" placeholder="请输入手机号码" />
+          <el-form-item label="排行榜类型">
+            <el-select v-model="queryInfo.type" placeholder="请选择">
+              <el-option label="全部" value="-1" />
+              <el-option label="回报率榜" value="1" />
+              <el-option label="财富榜" value="2" />
+              <el-option label="流水榜" value="3" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="用户名">
+            <el-input v-model="queryInfo.userName" placeholder="请输入用户名" />
           </el-form-item>
           <el-button type="primary">搜索</el-button>
         </el-form>
@@ -15,25 +23,18 @@
     </el-row>
     <el-table v-loading="listLoading" :data="tableData" border style="width: 100%">
       <el-table-column align="center" type="index" width="80px" />
-      <el-table-column prop="id" label="专家名称" align="center" />
-      <el-table-column prop="title" label="专家账户" align="center" />
-      <el-table-column prop="url" label="回报率" align="center" />
-      <el-table-column prop="path" label="专家介绍" align="center" />
-      <el-table-column prop="time" label="添加时间" align="center" />
-      <el-table-column label="是否启用修改方案" align="center">
-        <template slot-scope="{row}">
-          <el-tag size="small" :type="row.type == '启用' ? 'success': 'danger'">{{ row.type }}</el-tag>
-        </template>
-      </el-table-column>
+      <el-table-column prop="id" label="用户名" align="center" />
+      <el-table-column prop="title" label="数值" align="center" />
+      <el-table-column prop="url" label="排行榜类型" align="center" />
       <el-table-column label="操作" align="center">
         <template slot-scope="{row, $index}">
-          <span v-if="row.type === '启用'" class="pointer-span" @click="forbidden(row, $index)">
-            <svg-icon icon-class="ban" />
-            <span class="gray-text">禁用</span>
+          <span class="pointer-span" @click="modifyVideo(row, $index)">
+            <i class="el-icon-edit blue-text" />
+            <span class="blue-text">修改</span>
           </span>
-          <span v-if="row.type === '禁用'" class="pointer-span" @click="startUsing(row, $index)">
-            <i class="el-icon-circle-check green-text" />
-            <span class="green-text">启用</span>
+          <span class="pointer-span" style="margin-left: 10px" @click="deleteVideo(row, $index)">
+            <i class="el-icon-delete red-text" />
+            <span class="red-text">删除</span>
           </span>
         </template>
       </el-table-column>
@@ -53,8 +54,18 @@
 
     <el-dialog :title="dialogTitle" :visible.sync="isShowAdd" width="500px">
       <el-form ref="articalForm" :model="articalForm" :rules="rules">
-        <el-form-item label="专家手机号：" prop="title" :label-width="formLabelWidth">
+        <el-form-item label="用户名称" prop="title" :label-width="formLabelWidth">
           <el-input v-model="articalForm.title" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="数值" prop="desc" :label-width="formLabelWidth">
+          <el-input v-model="articalForm.desc" />
+        </el-form-item>
+        <el-form-item label="排行榜类型" prop="anchor" :label-width="formLabelWidth">
+          <el-select v-model="articalForm.anchor" placeholder="请选择">
+            <el-option label="回报率榜" value="1" />
+            <el-option label="财富榜" value="2" />
+            <el-option label="流水榜" value="3" />
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -70,8 +81,8 @@ export default {
   data() {
     return {
       queryInfo: {},
-      formLabelWidth: '150px',
-      dialogTitle: '新增专家',
+      formLabelWidth: '100px',
+      dialogTitle: '新增排行榜',
       listLoading: false,
       tableData: [
         {
@@ -80,7 +91,7 @@ export default {
           url:
             'http://cdn.lingke.com.cn/431783a0-a1fc-44e0-ba62-9f4bea46e6fd.png',
           path: 'http://h5.lingke.com.cn/yqRewardsWeb/h5/banner?id=19',
-          type: '禁用',
+          type: '0',
           time: '202005184232'
         },
         {
@@ -89,7 +100,7 @@ export default {
           url:
             'http://cdn.lingke.com.cn/431783a0-a1fc-44e0-ba62-9f4bea46e6fd.png',
           path: 'http://h5.lingke.com.cn/yqRewardsWeb/h5/banner?id=19',
-          type: '启用',
+          type: '0',
           time: '202005184232'
         },
         {
@@ -98,7 +109,7 @@ export default {
           url:
             'http://cdn.lingke.com.cn/431783a0-a1fc-44e0-ba62-9f4bea46e6fd.png',
           path: 'http://h5.lingke.com.cn/yqRewardsWeb/h5/banner?id=19',
-          type: '启用',
+          type: '1',
           time: '202005184232'
         },
         {
@@ -107,7 +118,7 @@ export default {
           url:
             'http://cdn.lingke.com.cn/431783a0-a1fc-44e0-ba62-9f4bea46e6fd.png',
           path: 'http://h5.lingke.com.cn/yqRewardsWeb/h5/banner?id=19',
-          type: '启用',
+          type: '1',
           time: '202005184232'
         },
         {
@@ -116,7 +127,7 @@ export default {
           url:
             'http://cdn.lingke.com.cn/431783a0-a1fc-44e0-ba62-9f4bea46e6fd.png',
           path: 'http://h5.lingke.com.cn/yqRewardsWeb/h5/banner?id=19',
-          type: '禁用',
+          type: '0',
           time: '202005184232'
         }
       ],
@@ -128,10 +139,24 @@ export default {
         desc: ''
       },
       rules: {
+        anchor: [
+          {
+            required: true,
+            message: '请选择排行榜类型',
+            trigger: 'blur'
+          }
+        ],
         title: [
           {
             required: true,
-            message: '请输入专家手机号',
+            message: '请输入用户名',
+            trigger: 'blur'
+          }
+        ],
+        desc: [
+          {
+            required: true,
+            message: '请输入数值',
             trigger: 'blur'
           }
         ]
@@ -141,13 +166,25 @@ export default {
     }
   },
   methods: {
+    handleRemove(file, fileList) {
+      console.log(file, fileList)
+    },
+    handlePictureCardPreview(file) {
+      console.log(file)
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
+    },
+    handlePic(resp, file, fileList) {
+      console.log(resp, file, fileList)
+      // this.articalForm.url = URL.createObjectURL(file.raw);
+    },
     modifyVideo(row, index) {
       this.isShowAdd = true
       this.articalForm = JSON.parse(JSON.stringify(row))
-      this.dialogTitle = '修改专家'
+      this.dialogTitle = '修改排行榜'
     },
     addArtical() {
-      this.dialogTitle = '新增专家'
+      this.dialogTitle = '新增排行榜'
       this.isShowAdd = true
     },
     saveVideo(formName) {
@@ -160,8 +197,8 @@ export default {
         }
       })
     },
-    forbidden(row, index) {
-      this.$confirm('确认想禁用??', '提示', {
+    deleteVideo(row, index) {
+      this.$confirm('确定想要删除?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -169,34 +206,13 @@ export default {
         .then(() => {
           this.$message({
             type: 'success',
-            message: '禁用成功!'
+            message: '删除成功!'
           })
-          row.type = '禁用'
         })
         .catch(() => {
           this.$message({
             type: 'info',
-            message: '已取消禁用'
-          })
-        })
-    },
-    startUsing(row, index) {
-      this.$confirm('确认想启用?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          this.$message({
-            type: 'success',
-            message: '启用成功!'
-          })
-          row.type = '启用'
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消启用'
+            message: '已取消删除'
           })
         })
     },

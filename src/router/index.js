@@ -143,6 +143,12 @@ export const asyncRoutes = [
         name: 'beansFlowing',
         meta: { title: '科豆流水' },
         component: () => import('@/views/agentManagement/BeansFlowing')
+      },
+      {
+        path: '/agentManagement/nationalPromotion',
+        name: 'nationalPromotion',
+        meta: { title: '全民推广' },
+        component: () => import('@/views/agentManagement/NationalPromotion')
       }
     ]
   },
@@ -167,6 +173,12 @@ export const asyncRoutes = [
         component: () => import('@/views/financialManagement/GuessFlowing')
       },
       {
+        path: '/financialManagement/auditCommissionWithdraw',
+        name: 'auditCommissionWithdraw',
+        meta: { title: '佣金提现审核' },
+        component: () => import('@/views/financialManagement/AuditCommissionWithdraw')
+      },
+      {
         path: '/financialManagement/beansFlowing',
         name: 'beansFlowing',
         meta: { title: '科豆流水' },
@@ -183,6 +195,12 @@ export const asyncRoutes = [
         name: 'offlinePayment',
         meta: { title: '线下充值' },
         component: () => import('@/views/financialManagement/OfflinePayment')
+      },
+      {
+        path: '/financialManagement/memberCommissionDetails',
+        name: 'memberCommissionDetails',
+        meta: { title: '会员佣金明细' },
+        component: () => import('@/views/financialManagement/MemberCommissionDetails')
       },
       {
         path: '/financialManagement/manualDeduction',
@@ -262,7 +280,7 @@ export const asyncRoutes = [
   {
     path: '/videoManagement',
     name: 'videoManagement',
-    // redirect: '/videoManagement/videoList',
+    redirect: '/videoManagement/videoList',
     component: Layout,
     meta: { title: '视频管理', icon: 'shipinbofangyingpian' },
     children: [
@@ -278,10 +296,16 @@ export const asyncRoutes = [
   {
     path: '/contentManagement',
     name: 'contentManagement',
-    redirect: '/contentManagement/articleInformation',
+    redirect: '/contentManagement/advisoryClassify',
     component: Layout,
     meta: { title: '内容', icon: 'guanli-2' },
     children: [
+      {
+        path: '/contentManagement/advisoryClassify',
+        name: 'advisoryClassify',
+        meta: { title: '资讯分类' },
+        component: () => import('@/views/contentManagement/AdvisoryClassify')
+      },
       {
         path: '/contentManagement/articleInformation',
         name: 'articleInformation',
@@ -323,6 +347,22 @@ export const asyncRoutes = [
       }
     ]
   },
+  // ------------------------------投注管理----------------------------------
+  {
+    path: '/betManagement',
+    name: 'betManagement',
+    redirect: '/betManagement/betList',
+    component: Layout,
+    meta: { title: '投注管理', icon: 'zhubo' },
+    children: [
+      {
+        path: '/betManagement/betList',
+        name: 'betList',
+        meta: { title: '投注列表' },
+        component: () => import('@/views/betManagement/BetList')
+      }
+    ]
+  },
   // ------------------------------主播管理----------------------------------
   {
     path: '/anchorManagement',
@@ -343,10 +383,16 @@ export const asyncRoutes = [
   {
     path: '/expertsPlan',
     name: 'expertsPlan',
-    redirect: '/expertsPlan/expertsList',
+    redirect: '/expertsPlan/expertsInfo',
     component: Layout,
     meta: { title: '专家方案', icon: 'zhuanjia' },
     children: [
+      {
+        path: '/expertsPlan/expertsInfo',
+        name: 'expertsInfo',
+        meta: { title: '专家信息' },
+        component: () => import('@/views/expertsPlan/ExpertsInfo')
+      },
       {
         path: '/expertsPlan/expertsList',
         name: 'expertsList',
@@ -358,6 +404,70 @@ export const asyncRoutes = [
         name: 'planList',
         meta: { title: '方案列表' },
         component: () => import('@/views/expertsPlan/PlanList')
+      }
+    ]
+  },
+  // ------------------------------奖励金管理----------------------------------
+  {
+    path: '/bountyManagement',
+    name: 'bountyManagement',
+    redirect: '/bountyManagement/bountyList',
+    component: Layout,
+    meta: { title: '奖励金管理', icon: 'zhuanjia' },
+    children: [
+      {
+        path: '/bountyManagement/bountyList',
+        name: 'bountyList',
+        meta: { title: '奖励金列表' },
+        component: () => import('@/views/bountyManagement/BountyList')
+      }
+    ]
+  },
+  // ------------------------------代理查看权限管理-----------------------------
+  {
+    path: '/agentPermissionManagement',
+    name: 'agentPermissionManagement',
+    redirect: '/agentPermissionManagement/agentList',
+    component: Layout,
+    meta: { title: '代理查看权限管理', icon: 'zhuanjia' },
+    children: [
+      {
+        path: '/agentPermissionManagement/agentList',
+        name: 'agentList',
+        meta: { title: '代理列表' },
+        component: () => import('@/views/agentPermissionManagement/AgentList')
+      }
+    ]
+  },
+  // ------------------------------投注金额管理----------------------------------
+  {
+    path: '/betAmount',
+    name: 'betAmount',
+    redirect: '/betAmount/betList',
+    component: Layout,
+    meta: { title: '投注金额管理', icon: 'zhuanjia' },
+    children: [
+      {
+        path: '/betAmount/betList',
+        name: 'betList',
+        meta: { title: '投注金额管理列表' },
+        component: () => import('@/views/betAmountManagement/BetList')
+      }
+    ]
+  },
+  // ------------------------------排行榜管理----------------------------------
+  {
+    path: '/topManagement',
+    name: 'topManagement',
+    redirect: '/topManagement/rankingList',
+    component: Layout,
+    meta: { title: '排行榜管理', icon: 'zhuanjia' },
+    children: [
+      {
+        path: '/topManagement/rankingList',
+        name: 'rankingList',
+        meta: { title: '排行榜列表' },
+        component: () => import('@/views/topManagement/RankingList')
       }
     ]
   },

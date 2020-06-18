@@ -15,6 +15,9 @@
           <el-form-item label="代理手机">
             <el-input placeholder />
           </el-form-item>
+          <el-form-item label="上级推广人">
+            <el-input placeholder />
+          </el-form-item>
           <el-form-item label="用户名">
             <el-input placeholder />
           </el-form-item>
@@ -37,9 +40,9 @@
       <el-table-column prop="agent" label="用户名" align="center" />
       <el-table-column prop="phone" label="手机号" align="center" />
       <el-table-column prop="tier" label="真实姓名" align="center" />
-      <el-table-column prop="createTime" label="直推代理" align="center" />
+      <el-table-column prop="agentName" label="代理姓名" align="center" />
       <el-table-column prop="balance" label="代理手机" align="center" />
-      <el-table-column prop="status" label="已开奖投注" align="center" />
+      <el-table-column prop="status" label="上级推广人" align="center" />
       <el-table-column prop="availableBalance" label="已开奖次数" align="center" />
       <el-table-column prop="cashDeposit" label="中奖总额" align="center" />
       <el-table-column prop="commissionThan" label="中奖次数" align="center" />
@@ -50,15 +53,22 @@
       <el-table-column prop="singleTotal" label="科豆余额" align="center" />
       <el-table-column prop="singleTotal" label="豆芽分余额" align="center" />
       <el-table-column prop="singleTotal" label="注册时间" align="center" />
-      <el-table-column fixed="right" label="操作" align="center" width="210px">
+      <el-table-column fixed="right" label="操作" align="center" width="300px">
         <template slot-scope="{row, $index}">
-          <span class="pointer-span">
+          <span class="pointer-span" @click="toBeansDetail(row, $index)">
             <svg-icon icon-class="douzi" />
-            <span class="yellow-text" @click="toBeansDetail(row, $index)">科豆明细</span>
+            <span class="yellow-text">科豆明细</span>
           </span>
-          <span class="pointer-span" style="margin-left: 20px">
+          <span
+            class="pointer-span"
+            style="margin-left: 20px"
+            @click="toBeanSproutDetail(row, $index)"
+          >
             <svg-icon icon-class="douyafen" />
-            <span class="green-text" @click="toBeanSproutDetail(row, $index)">豆芽分明细</span>
+            <span class="green-text">豆芽分明细</span>
+          </span>
+          <span class="pointer-span" style="margin-left: 20px" @click="toPromotion(row, $index)">
+            <span class="blue-text">我的推广</span>
           </span>
         </template>
       </el-table-column>
@@ -171,6 +181,7 @@ export default {
     }
   },
   methods: {
+    toPromotion(row, index) {},
     toBeansDetail(row, index) {
       this.$refs.beansDialog.showDialog(true, row)
     },
